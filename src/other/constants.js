@@ -1,0 +1,11 @@
+var ABC = 'qwertyuiopasdfghjklzxcvbnm';
+ABC = ABC.toUpperCase().split("").sort();
+export const radius = 20;
+export const qPadding = 5;
+export const pageHeight = 1123;
+export const maxQuestionHeight = 400;
+export const initNQ = 3;
+export const defaultBubbleValues = ['A', 'B', 'C'];
+export const defaultQuestionValue = ['Is Rosi the Cutest?'];
+export const defaultAnswers = ['Yes', 'No', 'Maybe'];
+export default ABC;
