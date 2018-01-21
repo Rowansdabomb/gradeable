@@ -3,7 +3,12 @@ import _ from 'lodash';
 import ClickableButton from '../components/clickablebutton';
 import Page from '../components/page';
 import AnswerKey from '../components/answerkey';
-import {pageHeight, initNQ, defaultBubbleValues, defaultQuestionValue, defaultAnswers} from '../other/constants';
+import {pageHeight, 
+        initNQ,
+        defaultBubbleValues, 
+        defaultQuestionValue, 
+        defaultAnswers,
+        defaultQuestionHeight} from '../other/constants';
 import ABC from '../other/constants';
 
 class Test extends Component {
@@ -14,6 +19,7 @@ class Test extends Component {
       pageEnd: [6],
       pages: [1],
       firstQuestionHeights: [],
+      pageHeight: 0,
       noSelect: false,
       questionValues: _.range(1, initNQ), 
       answerKey: _.range(1, initNQ).map(function() {return 0}),
@@ -33,7 +39,7 @@ class Test extends Component {
       noSelect: !prevState.noSelect
     }));
   }
-
+ 
   addAnswer = (index) => {
     let newBubbleValues = this.state.bubbleValues;
     newBubbleValues[index] = newBubbleValues[index].concat(ABC[newBubbleValues[index].length]);
@@ -55,6 +61,9 @@ class Test extends Component {
     }));
   }
   addQuestion = () => {
+    if(this.state.pageHeight + defaultQuestionHeight > pageHeight){
+      this.updatePage(this.state.pages.length - 1, this.state.pageHeight + defaultQuestionHeight);
+    }
     let newPageEnd = this.state.pageEnd;
     newPageEnd[newPageEnd.length - 1] = this.state.questionValues.length + 1;
     this.setState(prevState => ({
@@ -120,10 +129,10 @@ class Test extends Component {
     }));
   }
   addPage = () => {
-    console.log('add page');
+    console.log('page add pending');
     let newPageEnd = this.state.pageEnd;
     newPageEnd[newPageEnd.length - 1] = this.state.pageEnd[newPageEnd.length - 1] - 1;
-    newPageEnd = newPageEnd.concat(this.state.questionValues.length - 1);
+    newPageEnd = newPageEnd.concat(this.state.questionValues.length);
     let newPageStart = this.state.pageStart;
     newPageStart = newPageStart.concat(newPageEnd[newPageEnd.length - 2]);
     let newPages = this.state.pages;
@@ -132,12 +141,15 @@ class Test extends Component {
       pages: newPages,
       pageEnd: newPageEnd,
       pageStart: newPageStart
+    }, function () {
+      console.log('page add complete');
     });
   }
   /*
   * Moves First question on current page to previous page
   */
   moveQuestionUp = (index) => {
+    console.log('move question up pending');
     let newPageEnd = this.state.pageEnd;
     newPageEnd[index] = newPageEnd[index] - 1;
     let newPageStart = this.state.pageStart;
@@ -148,7 +160,9 @@ class Test extends Component {
     this.setState(prevState => ({
       pageEnd: newPageEnd,
       pageStart: newPageStart,
-    }));
+    }), function () {
+      console.log('move question up complete');
+    });
   }
   /*
   * Moves the last question on one page to the next page
@@ -175,7 +189,9 @@ class Test extends Component {
       pageEnd: newPageEnd,
       pageStart: newPageStart,
       pages: newPages,
-    }));
+    }), function () {
+      console.log('move question down');
+    });
   }
   /*
   * Handles cases for adding pages and moving questions automaticatlly 
@@ -184,6 +200,11 @@ class Test extends Component {
   updatePage = (index, height) => {
     let temp = height - pageHeight;
     console.log(temp);
+    if(index === this.state.pages.length - 1 && this.state.pageHeight !== height){
+      this.setState({
+        pageHeight: height
+      });
+    }
     if(temp >= 0){
       if(index + 1 === this.state.pages.length){
         this.addPage();

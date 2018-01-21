@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Answer from './answer';
 import Input from './input';
 import ClickableButton from './clickablebutton';
 //import ABC from '../other/constants';
-import {radius, qPadding, pageHeight} from '../other/constants';
-import $ from 'jquery';
+import {radius, qPadding} from '../other/constants';
+//import $ from 'jquery';
 
 class Question extends React.PureComponent {
 	constructor(props){
@@ -43,7 +43,6 @@ class Question extends React.PureComponent {
             inputValueAnswers, 
             inputValueQuestion, 
             questionValues, 
-            qindex,
             noSelect,
             selectedAnswer} = this.props;
     const showToggle = this.state.isHovered ? styles.hide: styles.show;
