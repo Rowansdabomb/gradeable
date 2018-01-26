@@ -146,7 +146,7 @@ class Test extends Component {
     let newPageStart = this.state.pageStart;
     newPageStart = newPageStart.concat(newPageEnd[newPageEnd.length - 2]);
     let newPages = this.state.pages;
-    newPages = newPages.concat(true);
+    newPages = newPages.concat(newPages[newPages.length - 1] + 1);
     this.setState({
       pages: newPages,
       pageEnd: newPageEnd,
@@ -289,9 +289,12 @@ class Test extends Component {
               <ClickableButton update={this.removeQuestion} value='-'/>
             </div>
           </div>
-          <AnswerKey answerKey={answerKey} numberOfAnswers={numberOfAnswers}/>
+          <AnswerKey pageStart={pageStart} answerKey={answerKey} numberOfAnswers={numberOfAnswers}/>
           <ClickableButton update={this.handlePrint} value={'Print'} />
           <ClickableButton update={this.unselect} value={'Toggle Select'} />
+          <form action = "http://localhost:5000/login" method = "post">
+            <button type='submit'></button>
+          </form>
         </div>
       </div>
     );
