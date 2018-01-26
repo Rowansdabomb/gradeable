@@ -4,7 +4,7 @@ import Question from '../components/question';
 import Input from '../components/input';
 import * as $ from 'jquery';
 // import ABC from '../other/constants';
-import {pageHeight} from '../other/constants';
+import {pageHeight, headerHeight} from '../other/constants';
 
 class Page extends Component {
   updatePage = () => {
@@ -47,7 +47,7 @@ class Page extends Component {
     return (
         <div>
         {_.range(this.props.pages.length).map(i =>
-          <div key={i} className={'page'} >
+          <div key={i} className={'page'} style={styles.center} >
             <div className={'pageHeight'}>
               <div className={i === 0 ? 'show': 'none'}  style={styles.flex}>
                 <div style={styles.center}>
@@ -90,6 +90,6 @@ const styles = {
   },
   flex: {
     display: 'flex'
-  }
+  },
 }
 export default Page;

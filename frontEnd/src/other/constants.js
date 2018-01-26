@@ -9,4 +9,7 @@ export const defaultBubbleValues = ['A', 'B', 'C'];
 export const defaultQuestionValue = ['Is Rosi the Cutest?'];
 export const defaultAnswers = ['Yes', 'No', 'Maybe'];
 export const defaultQuestionHeight = 156.9;
+export const headerHeight = 100;
+export const primaryColor = '#3FA5D0';
+export const secondaryColor = '#ffffff';
 export default ABC;

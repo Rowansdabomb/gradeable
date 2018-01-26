@@ -89,7 +89,7 @@ textarea {
   padding: 2.54cm;
   border: 1px solid #efefef;
   background-color: #ffffff;
-  margin: 2cm auto; 
+  margin: 20px auto !important; 
   box-shadow: 8px 8px 5px #888;
   color: #000000;
   font-family: 'Montserrat' !important;
@@ -127,7 +127,10 @@ textarea {
 .show {
   display: inherit;
 }
-
+.header {
+  color: #3FA5D0;
+  background-color: #ffffff;
+}
 @media print {
   .noPrint{
     display: none;
@@ -152,6 +155,10 @@ textarea {
     padding: 0;
     background-color: #ffffff;
     color: #3FA5D0;
+  }
+  .header{
+    background-color: #3fa5d0;
+    color: #ffffff;
   }
   .button {
     top: 20px;
@@ -178,7 +185,6 @@ textarea {
     border: none;
     border-bottom: 1px dashed black;
     background-color: #ffffff;
-    float: right; 
     box-shadow: none;
     color: #000000;
     font-family: 'Montserrat' !important;

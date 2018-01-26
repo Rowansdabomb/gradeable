@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import ClickableButton from '../components/clickablebutton';
+import Header from '../components/header';
 import Page from '../components/page';
-import AnswerKey from '../components/answerkey';
+import SideBar from '../components/sidebar';
 import * as $ from 'jquery';
 import {pageHeight, 
         initNQ,
         defaultBubbleValues, 
         defaultQuestionValue, 
         defaultAnswers,
+        headerHeight,
         defaultQuestionHeight} from '../other/constants';
 import ABC from '../other/constants';
 
@@ -260,41 +261,34 @@ class Test extends Component {
             selectedAnswer
             } = this.state;
     return (
-      <div>  
-        <Page 
-              noSelect={noSelect}
-              pageStart={pageStart}
-              pageEnd={pageEnd}
-              pages={pages}
-              firstQuestionHeights={this.state.firstQuestionHeights}
-              addPage={this.addPage}
-              updatePage={this.updatePage}
-              updateAnswerKey={this.updateAnswerKey}
-              updateNumberOfAnswers={this.updateNumberOfAnswers}
-              updateFirstQuestionHeight={this.updateFirstQuestionHeight}
-              questionValues={questionValues} 
-              bubbleValues={bubbleValues}
-              inputValueAnswers={inputValueAnswers}
-              inputValueQuestion={inputValueQuestion}
-              selectedAnswer={selectedAnswer}
-              addAnswer={this.addAnswer}
-              removeAnswer={this.removeAnswer}
-              updateSelectedAnswer={this.updateSelectedAnswer}/>
-        
-        <div className={'noPrint'} style={styles.fixedTop}>
-          <div>
-            <h3>Question</h3>
-            <div className={['buttons', 'spaceBetween'].join(' ')} style={styles.buttons}>
-              <ClickableButton update={this.addQuestion} value='+'/>
-              <ClickableButton update={this.removeQuestion} value='-'/>
-            </div>
-          </div>
-          <AnswerKey pageStart={pageStart} answerKey={answerKey} numberOfAnswers={numberOfAnswers}/>
-          <ClickableButton update={this.handlePrint} value={'Print'} />
-          <ClickableButton update={this.unselect} value={'Toggle Select'} />
-          <form action = "http://localhost:5000/login" method = "post">
-            <button type='submit'></button>
-          </form>
+      <div>
+        <Header />
+        <div style={styles.headerAdjust}>
+          <Page noSelect={noSelect}
+                pageStart={pageStart}
+                pageEnd={pageEnd}
+                pages={pages}
+                firstQuestionHeights={this.state.firstQuestionHeights}
+                addPage={this.addPage}
+                updatePage={this.updatePage}
+                updateAnswerKey={this.updateAnswerKey}
+                updateNumberOfAnswers={this.updateNumberOfAnswers}
+                updateFirstQuestionHeight={this.updateFirstQuestionHeight}
+                questionValues={questionValues} 
+                bubbleValues={bubbleValues}
+                inputValueAnswers={inputValueAnswers}
+                inputValueQuestion={inputValueQuestion}
+                selectedAnswer={selectedAnswer}
+                addAnswer={this.addAnswer}
+                removeAnswer={this.removeAnswer}
+                updateSelectedAnswer={this.updateSelectedAnswer}/>
+          <SideBar  addQuestion={this.addQuestion}
+                    removeQuestion={this.removeQuestion}
+                    handlePrint={this.handlePrint}
+                    unselect={this.unselect}
+                    pageStart={pageStart}
+                    answerKey={answerKey}
+                    numberOfAnswers={numberOfAnswers}/>
         </div>
       </div>
     );
@@ -317,9 +311,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'row'
   },
-  fixedTop: {
-    position: 'fixed',
-    top: 0
-  }
+  headerAdjust: {
+    position: 'relative',
+    top: headerHeight,
+  },
 }
 export default Test;
