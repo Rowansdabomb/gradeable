@@ -1,8 +1,10 @@
 var ABC = 'qwertyuiopasdfghjklzxcvbnm';
 ABC = ABC.toUpperCase().split("").sort();
 export const radius = 20;
+export const smallradius = 16;
+export const medradius = 20;
 export const qPadding = 5;
-export const pageHeight = 1123;
+export const pageHeight = 1023;
 export const maxQuestionHeight = 400;
 export const initNQ = 7;
 export const defaultBubbleValues = ['A', 'B', 'C'];

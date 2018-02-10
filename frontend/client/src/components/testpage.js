@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import Question from '../components/question';
 import Input from '../components/input';
+import QR from '../components/qr';
+import TestUser from '../components/testuser'
 import * as $ from 'jquery';
 // import ABC from '../other/constants';
 import {pageHeight} from '../other/constants';
 
-class Page extends Component {
+class TestPage extends Component {
   updatePage = () => {
     for(let i = 0; i < this.props.pages.length; i++){
       let height = $('.pageHeight').eq(i).outerHeight();
@@ -47,12 +49,10 @@ class Page extends Component {
     return (
         <div>
         {_.range(this.props.pages.length).map(i =>
-          <div key={i} className={'page'} style={styles.center} >
+          <div key={i} className={'page'} style={styles.page} >
             <div className={'pageHeight'}>
-              <div className={i === 0 ? 'show': 'none'}  style={styles.flex}>
-                <div style={styles.center}>
+              <div className={i === 0 ? 'show': 'none'}  style={styles.center}>
                   <Input justify={'center'} type={'title'} defaultText={'Test Title'} />
-                </div>
               </div>
               {_.range(questionValues.slice(pageStart[i], pageEnd[i]).length).map( j => 
                 <Question key={j}
@@ -75,21 +75,29 @@ class Page extends Component {
                           
               )}
             </div>
+            <QR codevalue={"Hello World!".concat(String(i))}/>
           </div>
         )}
-
+        <TestUser codevalue={"Hello World!".concat(String(this.props.pages.length))}/>
       </div>
     );
   }
 }
 
 const styles = {
-  center: {
+  page: {
     margin: 'auto',
-    justifySelf: 'center'
+    justifySelf: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
   },
   flex: {
     display: 'flex'
   },
 }
-export default Page;
+export default TestPage;

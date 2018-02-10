@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
-import Page from '../components/page';
+import TestPage from '../components/testpage';
 import SideBar from '../components/sidebar';
 import * as $ from 'jquery';
 import {pageHeight, 
@@ -9,7 +9,6 @@ import {pageHeight,
         defaultBubbleValues, 
         defaultQuestionValue, 
         defaultAnswers,
-        headerHeight,
         defaultQuestionHeight} from '../other/constants';
 import ABC from '../other/constants';
 
@@ -32,8 +31,8 @@ class Editor extends Component {
       selectedAnswer: _.range(1, initNQ).map(function() {return 0}),
     };
   }
-  
-  handlePrint = () =>{
+
+  handlePrint = () => {
     window.print();
   }
   unselect = () => {
@@ -41,7 +40,7 @@ class Editor extends Component {
       noSelect: !prevState.noSelect
     }));
   }
- 
+  
   addAnswer = (index) => {
     let newBubbleValues = this.state.bubbleValues;
     newBubbleValues[index] = newBubbleValues[index].concat(ABC[newBubbleValues[index].length]);
@@ -274,7 +273,7 @@ class Editor extends Component {
             } = this.state;
     return (
       <div>
-        <Page noSelect={noSelect}
+        <TestPage noSelect={noSelect}
               pageStart={pageStart}
               pageEnd={pageEnd}
               pages={pages}
@@ -302,24 +301,5 @@ class Editor extends Component {
       </div>
     );
   }
-}
-
-const styles = {
-  buttons: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-  center: {
-    margin: 'auto',
-    justifySelf: 'center'
-  },
-  flex: {
-    display: 'flex'
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-
 }
 export default Editor;

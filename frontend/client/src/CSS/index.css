@@ -20,6 +20,9 @@ body, h1, h2, h3 {
   font-family: 'Montserrat' !important;
   font-weight: normal;
 }
+canvas {
+  vertical-align: top;
+}
 h3 {
   margin: 3px 5px;
 }
@@ -98,7 +101,7 @@ textarea {
 .page {
   width: 21cm;
   height: 29.7cm;
-  padding: 2.54cm;
+  padding: 2.54cm 2.54cm 1cm 2.54cm;
   border: 1px solid #efefef;
   background-color: #ffffff;
   margin: 20px auto !important; 
@@ -151,7 +154,8 @@ textarea {
 } */ 
 
 .selected {
-  background-color: #43C883 !important;
+  background-color: #229944 !important;
+  /* background-color: #444 !important; */
   border-color: #23a873 !important;
   color: #ffffff;
 }
@@ -181,9 +185,21 @@ textarea {
   color: #3FA5D0;
   background-color: #ffffff;
 }
+.adjustHeaderHeight{
+  position: relative;
+  top: 100px;
+}
 @media print {
   .noPrint{
     display: none !important;
+  }
+  body{
+    background-color: none;
+    background: none;
+  }
+  .adjustHeaderHeight{
+    top: 0;
+    height: 0px,
   }
   .page {
     width: 21cm;

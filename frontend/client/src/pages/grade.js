@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import logo from './logo.svg';
-import {headerHeight} from '../other/constants';
 import ClickableButton from '../components/clickablebutton';
+import UploadFile from '../components/uploadfile';
 import * as $ from 'jquery';
 class Grade extends Component {
   constructor(props){
@@ -40,21 +40,10 @@ class Grade extends Component {
               <div className="sk-cube4 sk-cube"></div>
               <div className="sk-cube3 sk-cube"></div>
             </div>
+            <UploadFile/>
         </div>
     );
   }
-}
-
-const styles = {
-  show: {
-    display: 'block',
-    height: '20px',
-    width: '20px',
-    backgroundColor: 'red'
-  },
-  hide: {
-    display: 'none'
-  },
 }
 
 export default Grade;

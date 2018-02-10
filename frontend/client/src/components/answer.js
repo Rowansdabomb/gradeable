@@ -23,7 +23,8 @@ class Answer extends React.Component{
         {_.range(this.props.bubbleValues.length).map(i =>
           <div key={i} style={styles.bubbleContainer}>
             <div style={styles.alignCenter} onClick={this.props.callBack.bind(this, i)}>
-              <Bubble class={this.getClass(i)} 
+              <Bubble class={this.getClass(i)}
+                      click={false} 
                       value={this.props.bubbleValues[i]}/>
             </div>
             <Input defaultText={this.props.inputValue[i]} />
@@ -37,7 +38,8 @@ class Answer extends React.Component{
 const styles = {
   alignCenter: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: '20px',
   },
   bubbleContainer: {
     display: 'flex',

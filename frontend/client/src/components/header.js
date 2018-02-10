@@ -7,15 +7,18 @@ const Header = props => {
   // <button style={styles.front} onClick={this.props.callApi}>Click here</button>
   // <p style={styles.test} className="App-intro">{this.props.response}</p>
   return (
-      <div className={'noPrint, header'} style={styles.pageTop}>
-          <div style={styles.rowBlock}></div>
-          <div style={{...styles.rowBlock, ...styles.titlefont}}>HundoP</div>
-          <div style={styles.rowBlock}>
-            <nav style={{...styles.row, ...styles.padding}}>
-                <div style={styles.navElement}><Link to='/'>Home</Link></div>
-                <div style={styles.navElement}><Link to='/grade'>Grade</Link></div>
-            </nav>
-          </div>
+      <div className={'noPrint'}>
+        <div className={'header'} style={styles.pageTop}>
+            <div style={styles.rowBlock}></div>
+            <div style={{...styles.rowBlock, ...styles.titlefont}}>HundoP</div>
+            <div style={styles.rowBlock}>
+              <nav style={{...styles.row, ...styles.padding}}>
+                  <div style={styles.navElement}><Link to='/'>Home</Link></div>
+                  <div style={styles.navElement}><Link to='/basic'>Basic</Link></div>
+                  <div style={styles.navElement}><Link to='/grade'>Grade</Link></div>
+              </nav>
+            </div>
+        </div>
       </div>
     );
 }
