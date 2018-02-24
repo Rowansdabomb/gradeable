@@ -147,7 +147,7 @@ def getQuestions(thresh, xstart, ystart):
     for c in questionCnts:
         i = 0
         while i < len(c):
-            c[i][0] = c[i][0] + (ystart, xstart)
+            c[i][0] = c[i][0] + (xstart, ystart)
             i = i + 1
 
     return questionCnts

@@ -1,14 +1,25 @@
 a:link {
   text-decoration: none;
+  color: inherit;
 }
 a:visited {
   text-decoration: none;
+  color: inherit;
 }
 a:hover {
   text-decoration: none;
+  color: inherit;
 }
 a:active {
   text-decoration: none;
+  color: inherit;
+}
+.hoverLink{
+  margin: 8px, 0;
+  transition: .25s;
+}
+.hoverLink:hover{
+  letter-spacing: .05em;
 }
 body{
   margin: 0;
@@ -19,12 +30,66 @@ body{
 body, h1, h2, h3 {
   font-family: 'Montserrat' !important;
   font-weight: normal;
+  display: block;
 }
 canvas {
   vertical-align: top;
 }
+h2 {
+  margin: 2px 0;
+}
 h3 {
   margin: 3px 5px;
+}
+input, select {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ffffff;
+}
+.loginForm{
+  width: 400px;
+  max-height: 600px;
+  margin: 50px;
+}
+.fullWidth{
+  width: 100%;
+}
+.flex{
+  display: flex;
+}
+.text-center{
+  text-align: center;
+}
+/* .col{
+  display: flex;
+  flex-direction: column;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+} */
+.justifyStart{
+  justify-content: start;
+}
+.justifyEnd{
+  justify-content: end;
+}
+.justifyCenter{
+  justify-content: center;
+}
+.justifyAround{
+  justify-content: space-around;
+}
+.justifyBetween{
+  justify-content: space-between;
+}
+.alignStart{
+  align-items: start;
+}
+.alignCenter{
+  align-items: center;
 }
 textarea {
   font-family: 'Montserrat' !important;
@@ -37,24 +102,57 @@ textarea {
   text-align: center;
   font-size: 2em;
 }
-.button {
+.button, .buttonblue {
   top: 20px;
   display: flex;
   align-Items: center;
   justify-content: center;
-  background-color: transparent;
-  border: 3px solid #ffffff;
-  color: #ffffff;
+  background-color: #3FA5D0;
   border-radius: 5px;
   cursor: pointer;
   margin: 3px;
   padding: 5px;
-  max-width: 140px;
-  max-height: 16px;
   font-weight: bold;
+  box-shadow: none;
   transition: .25s;
 }
-
+.button{
+  border: 3px solid #ffffff;
+  color: #ffffff;
+}
+.testSaveIcon{
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  margin: auto;
+}
+.buttonblue {
+  border: 3px solid #3FA5D0;
+  background-color: #ffffff;
+  color: #3FA5D0;
+}
+.button:hover{
+  background-color: #ffffff;
+  color: #3FA5D0;
+  transition: 0.25s;
+} .buttonblue:hover{
+  background-color: #3FA5D0;
+  color: #ffffff;
+  transition: 0.25s;
+}
+.block{
+  display: block;
+}
+button{
+  box-sizing: content-box;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
 .buttons>.button:nth-child(1) {
   transform: translate(0, 0);
   transition: .25s;
@@ -167,13 +265,14 @@ textarea {
   justify-content: space-between;
 }
 
-.normalButton {
+/* .normalButton {
   padding: 10px 5px;
-}
+} */
 
 .squareButton {
-  width: 30px;
-  height: 30px;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 30px;
 }
 .none {
   display: none !important;
@@ -181,14 +280,12 @@ textarea {
 .show {
   display: inherit;
 }
-.header {
-  color: #3FA5D0;
-  background-color: #ffffff;
-}
+
 .adjustHeaderHeight{
   position: relative;
   top: 100px;
 }
+
 @media print {
   .noPrint{
     display: none !important;
@@ -226,7 +323,7 @@ textarea {
     background-color: #3fa5d0;
     color: #ffffff;
   }
-  .button {
+  /* .button {
     top: 20px;
     display: flex;
     align-Items: center;
@@ -242,7 +339,7 @@ textarea {
     max-height: 16px;
     font-weight: bold;
     transition: .25s;
-  }
+  } */
   .page {
     width: 600px;
     height: 29.7cm;
@@ -261,7 +358,7 @@ textarea {
 @page{size:auto; margin:5mm;}
 
 .sk-folding-cube {
-  display: none;
+  /* display: none; */
   margin: 20px auto;
   width: 40px;
   height: 40px;

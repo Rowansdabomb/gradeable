@@ -1,24 +1,17 @@
 import React, { Component } from 'react';
 import TestUser from '../components/testuser';
+import HeaderRoute from '../components/headerroute';
 
 class Basic extends Component {
 
     render() {
-        const rowLength = 10;
       return( 
         <div>
-                <TestUser />
-            
+          <HeaderRoute user={this.props.user}/>
+          <TestUser />
         </div>
       );
     }
   }
   
-
-const styles = {
-  adjustHeader: {
-
-  }
-}
-
 export default Basic;

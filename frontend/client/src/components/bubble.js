@@ -29,14 +29,14 @@ class Bubble extends Component {
 
     if(String(this.props.bubbleSize) === 'small'){
       bubbleSize = {
-        fontSize: '.7em',
+        fontSize: '.6em',
         width: smallradius,
         height: smallradius,
         borderRadius: smallradius,
       }
     }else{
       bubbleSize = {
-        fontSize: '.9em',
+        fontSize: '.8em',
         width: medradius,
         height: medradius,
         borderRadius: medradius,

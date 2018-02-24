@@ -13,6 +13,9 @@ class Question extends React.PureComponent {
        isHovered: 'false',
     };
   }
+  handleSave = () => {
+    
+  }
   addAnswer = () => {
     this.props.addAnswer(this.props.qindex);
     //this.props.updateNumberOfAnswers(this.props.qindex, this.props.inputValueAnswers.length + 1);
@@ -52,19 +55,23 @@ class Question extends React.PureComponent {
           <div style={styles.column}>
             <div style={styles.question}>
               <div style={styles.questionNumber}>{questionValues}.</div>
-              <Input type='question' defaultText={inputValueQuestion[0]}/>
+              <Input type='question' onSave={this.onSave} defaultText={inputValueQuestion[0]}/>
             </div>
             <div style={styles.row}>
               <div style={showToggle}>
                 <div className={'test'}>
                   <h3>Answer</h3>
-                  <div className={[btnHover, 'spaceBetween'].join(' ')} style={styles.row}>
-                    <ClickableButton  key={0}
-                                      update={this.addAnswer.bind(this)} 
-                                      value='+'/>
-                    <ClickableButton  key={1}
-                                      update={this.removeAnswer.bind(this)} 
-                                      value='-'/>
+                  <div className={[btnHover, 'row', 'no-gutters'].join(' ')} style={styles.row}>
+                    <div className={['col-5', 'no-gutters'].join(' ')}>
+                      <ClickableButton  key={0}
+                                        update={this.addAnswer.bind(this)} 
+                                        value='+'/>
+                    </div>
+                    <div className={['col-5', 'no-gutters'].join(' ')}>
+                      <ClickableButton  key={1}
+                                        update={this.removeAnswer.bind(this)} 
+                                        value='-'/>
+                    </div>
                   </div>
                   
                 </div>

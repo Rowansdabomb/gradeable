@@ -19,7 +19,7 @@ class UploadFile extends Component {
         let temp = [];
         let newFiles = [];
         for(let i = 0; i < e.target.files.length; i++){
-            console.log('pushed: ' + e.target.files[i]);
+            // console.log('pushed: ' + e.target.files[i]);
             if(this.state.fileHistory.indexOf(e.target.files[i]) === -1){
                 temp.push(e.target.files[i]);
                 newFiles.push(e.target.files[i]);
@@ -45,9 +45,10 @@ class UploadFile extends Component {
     for(let i = 0; i < selectedFiles.length; i++){
         formData.append('selectedFiles', selectedFiles[i]);
     }
-    axios.post('/', formData)
+    // console.log('form data submitted: ' + formData);
+    axios.post('/api/upload', formData)
       .then((result) => {
-        // access results...
+        console.log(result.message);
       });
   }
 
@@ -61,7 +62,7 @@ class UploadFile extends Component {
           onChange={this.onChange}
           multiple
         />
-        <button type="submit">Submit</button>
+        <button className={'button'} type="submit">Submit</button>
       </form>
     );
   }

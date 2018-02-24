@@ -5,24 +5,30 @@ import ClickableButton from './clickablebutton';
 import {headerHeight} from '../other/constants';
 
 class SideBar extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      isHovered: false,
+      isHovered: false
     };
   }
-  handleHover = () =>{
-    this.setState(prevState=> ({isHovered: !prevState.isHovered}));
-    console.log('handlehover');
+  handleHover = () => {
+    this.setState(prevState => ({
+      isHovered: !prevState.isHovered
+    }));
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
   }
   render() {
-    const showToggle = this.state.isHovered ? 'showSidebar': 'hideSideBar';
+    const showToggle = this.state.isHovered
+      ? 'showSidebar'
+      : 'hideSideBar';
     return (
       <div className={'noPrint'} style={styles.fixedTop}>
-        <div className={showToggle} 
-        // style={styles.fixedTop}
-        onMouseEnter={this.handleHover} 
-        onMouseLeave={this.handleHover}>
+        <div
+          className={showToggle}
+          onMouseEnter={this.handleHover}
+          onMouseLeave={this.handleHover}>
           <div style={styles.icon}>
             <i className="fa fa-bars" aria-hidden="true"></i>
           </div>
@@ -33,11 +39,13 @@ class SideBar extends Component {
               <ClickableButton update={this.props.removeQuestion} value='-'/>
             </div>
           </div>
-          <AnswerKey    pageStart={this.props.pageStart} 
-                        answerKey={this.props.answerKey} 
-                        numberOfAnswers={this.props.numberOfAnswers}/>
-          <ClickableButton update={this.props.handlePrint} value={'Print'} />
-          <ClickableButton update={this.props.unselect} value={'Toggle'} />
+          <AnswerKey
+            pageStart={this.props.pageStart}
+            answerKey={this.props.answerKey}
+            numberOfAnswers={this.props.numberOfAnswers}/>
+          <ClickableButton update={this.props.handlePrint} value={'Print'}/>
+          <ClickableButton update={this.props.unselect} value={'Toggle'}/>
+          <ClickableButton update={this.props.saveTest} value={'Save'}/>
         </div>
       </div>
     );
@@ -47,11 +55,11 @@ class SideBar extends Component {
 const styles = {
   column: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   fixedTop: {
     position: 'fixed',
-    top: headerHeight -25,
+    top: headerHeight - 25
   },
   icon: {
     width: '50px',

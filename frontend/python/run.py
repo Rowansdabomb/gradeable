@@ -8,6 +8,7 @@ import cv2
 import time
 
 start = time.clock()
+print('run.py started')
 # multiImage()
 # getName(10, 16)
 # getQRCode()
@@ -31,20 +32,14 @@ qrtext = functions.decodeQR(qr)
 print(qrtext)
 
 answerkey = functions.getAnswerKey()
-qcxstart = int(pageH/8)
-qcxend = int(7*pageH/8)
-qcystart = int(pageW/10)
-qcyend = int(3*pageW/10)
+qcystart = int(pageH/9)
+qcyend = int(8*pageH/9)
+qcxstart = int(pageW/10)
+qcxend = int(2*pageW/10)
 
-questionROI = paper[1][qcxstart:qcxend, qcystart:qcyend]
+questionROI = paper[1][ qcystart:qcyend, qcxstart:qcxend]
+cv2.imshow('roi', questionROI)
 cnts = functions.getQuestions(questionROI, qcxstart, qcystart)
-
-# cnts = cv2.warpAffine(cnts, translation_matrix, (pageW, pageH))
-# cv2.drawContours(image, cnts, -1, (255, 0, 0), 10)
-
-# cv2.imshow('questions', cv2.resize(image, None, fx=.3, fy=.3, interpolation=cv2.INTER_LINEAR))
-# cv2.waitKey(0)
-
 
 grade = functions.gradePage(paper[0].copy(), paper[1].copy(), cnts, answerkey)
 print('grade:' + str(grade[1]))

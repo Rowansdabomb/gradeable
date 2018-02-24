@@ -1,44 +1,82 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import {headerHeight} from '../other/constants';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { headerHeight } from '../other/constants';
+import axios from 'axios';
 
-
-const Header = props => {
+class Header extends Component {
   // <button style={styles.front} onClick={this.props.callApi}>Click here</button>
   // <p style={styles.test} className="App-intro">{this.props.response}</p>
-  return (
-      <div className={'noPrint'}>
-        <div className={'header'} style={styles.pageTop}>
-            <div style={styles.rowBlock}></div>
-            <div style={{...styles.rowBlock, ...styles.titlefont}}>HundoP</div>
-            <div style={styles.rowBlock}>
-              <nav style={{...styles.row, ...styles.padding}}>
-                  <div style={styles.navElement}><Link to='/'>Home</Link></div>
-                  <div style={styles.navElement}><Link to='/basic'>Basic</Link></div>
-                  <div style={styles.navElement}><Link to='/grade'>Grade</Link></div>
+  handleLogout = () => {
+    axios.post('/api/logout', {})
+      .then((result) => {
+        if (typeof (result.data) === 'object') {
+          console.log(result.data);
+          this.props.goToUrl(result.data.url);
+        } else {
+          alert('unkown error');
+          console.log(result.data);
+        }
+      });
+  }
+  render() {
+    return (
+      <div className={ 'noPrint' }>
+        <div className={ ['row', 'no-gutters', 'align-items-center'].join(' ') } style={ styles.header }>
+          <div className={ ['col-md-4', 'align-content-center'].join(' ') }></div>
+          <div className={ ['col-md-4', 'text-center', 'align-se-center'].join(' ') }>
+            <div className={'col-12'}></div>
+            <div className={ ['col-12', 'text-center'].join(' ') } style={ styles.title }>
+              HundoP
+            </div>
+            <div className={'col-12'}>
+              <nav className={ 'row' }>
+                <div className={ [ 'col-md-4'].join(' ') }>
+                  <Link to='/home'>Home</Link>
+                </div>
+                <div className={ 'col-md-4' }>
+                  <Link to='/basic'>Basic</Link>
+                </div>
+                <div className={ 'col-md-4' }>
+                  <Link to='/grade'>Grade</Link>
+                </div>
               </nav>
             </div>
+          </div>
+          <div className={ ['col-md-2', 'offset-2'].join(' ') }>
+            <div className={['row', 'align-items-center'].join(' ')}>
+              <div className={'col-md-12'}>
+                Logged In as: <div style={styles.username}>{ this.props.user }</div>
+              </div>
+              <div className={ ['col-md-6'].join(' ')}>
+                <div className={'buttonblue'} onClick={ this.handleLogout }>
+                  logout
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    );
+      );
+  }
+
 }
 
 const styles = {
-  pageTop: {
-    display: 'flex',
-    flexDirection: 'column',
+  header: {
     position: 'fixed',
     top: '0',
     height: headerHeight,
     width: '100%',
     zIndex: '100',
-    alignItems: 'center',
-    justifyContent: 'center',
+    color: '#3FA5D0',
+    backgroundColor: '#ffffff',
   },
-  titlefont: {
+  title: {
     fontSize: '2em',
     letterSpacing: '2px',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    position: 'relative',
+    top: '-8px',
   },
   padding: {
     padding: '5px',
@@ -55,6 +93,10 @@ const styles = {
   navElement: {
     margin: '0 15px',
     textDecoration: 'none',
+  },
+  username: {
+    fontSize: '1.2em',
+    display: 'inline-block',
   }
 }
 
