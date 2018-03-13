@@ -25,7 +25,7 @@ var UserSchema = new mongoose.Schema({
     default: Date.now
   },
   tests: [Test.schema],
-  imageIds: [ImageModel.schema],
+  tempImages: [ImageModel.schema],
 });
 
 UserSchema.statics.authenticate = function (email, password, callback) {

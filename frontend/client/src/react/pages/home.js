@@ -13,9 +13,8 @@ class Home extends Component {
         if (res.data.err) {
           console.log(res.data.err);
         }
-        this
-          .props
-          .getTests(res.data.testIds);
+        this.props.getTests(res.data.testIds, res.data.testNames);
+        // this.props.getTests(res.data.testNames);
       })
   }
 
@@ -35,7 +34,7 @@ class Home extends Component {
             <div className={ ['row'].join(' ') } style={ styles.testSelector }>
               <h1 className={ ['col-12', 'text-center'].join(' ') }>Tests!</h1>
               { this.props
-                  .tests
+                  .testNames
                   .map((test, i) => <h2 style={ styles.test } className={ ['col-12', 'text-center'].join(' ') } key={ i }>
                                                                                   <Link className={ 'hoverLink' } key={ test } style={ styles.testSelector } to={ '/test/' + String(i) }>{ test }</Link>
                                                                                   </h2>) }

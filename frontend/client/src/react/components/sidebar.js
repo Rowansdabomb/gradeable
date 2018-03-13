@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import AnswerKey from './answerkey';
 import ClickableButton from './clickablebutton';
 
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as actions from '../../redux/actions/actions';
+import PropTypes from 'prop-types';
+
 import {headerHeight} from '../other/constants';
 
 class SideBar extends Component {
@@ -16,8 +21,11 @@ class SideBar extends Component {
       isHovered: !prevState.isHovered
     }));
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
+  addQuestion = () => {
+    this.props.updatePage(this.props.pageStarts.length - 1, null, 'addQuestion');
+  }
+  removeQuestion = () => {
+    this.props.updatePage(this.props.pageStarts.length - 1, null, 'removeQuestion');
   }
   render() {
     const showToggle = this.state.isHovered
@@ -35,13 +43,13 @@ class SideBar extends Component {
           <div>
             <h3>Question</h3>
             <div className={['buttons', 'spaceBetween'].join(' ')} style={styles.buttons}>
-              <ClickableButton update={this.props.addQuestion} value='+'/>
-              <ClickableButton update={this.props.removeQuestion} value='-'/>
+              <ClickableButton update={this.addQuestion} value='+'/>
+              <ClickableButton update={this.removeQuestion} value='-'/>
             </div>
           </div>
           <AnswerKey
-            pageStart={this.props.pageStart}
-            answerKey={this.props.answerKey}
+            pageStart={this.props.pageStarts}
+            answerKey={this.props.selectedAnswer}
             numberOfAnswers={this.props.numberOfAnswers}/>
           <ClickableButton update={this.props.handlePrint} value={'Print'}/>
           <ClickableButton update={this.props.unselect} value={'Toggle'}/>
@@ -76,5 +84,22 @@ const styles = {
     flexDirection: 'row'
   }
 }
-
-export default SideBar;
+SideBar.propTypes = {
+  actions: PropTypes.object,
+  noSelect: PropTypes.bool,
+};
+function mapStateToProps(state) {
+  return {
+    noSelect: state.noSelect,
+    pageStarts: state.testState.pageStarts,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideBar);

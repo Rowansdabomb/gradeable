@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import logo from './logo.svg';
-import Main from './pages/main'
+import Main from './react/pages/main'
 // import Header from './components/header';
 // import {BrowserRouter} from 'react-router-dom';
 

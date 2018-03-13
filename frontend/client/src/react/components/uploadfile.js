@@ -48,7 +48,7 @@ class UploadFile extends Component {
     // console.log('form data submitted: ' + formData);
     axios.post('/api/upload', formData)
       .then((result) => {
-        console.log(result.message);
+        this.props.update();
       });
   }
 

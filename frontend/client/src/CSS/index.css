@@ -1,3 +1,16 @@
+:root{
+  --primary-color: #3FA5D0;
+  --secondary-color: #ffffff;
+  --primary-font-color: #ffffff;
+  --secondary-font-color: #3FA5D0;
+  --font-size-xl: 2em;
+  --font-size-lg: 1.5em;
+  --font-size-md: 1em;
+  --font-size-sm: .7em;
+  --page-width: 21.59cm;
+  --page-height: 27.94cm;
+}
+
 a:link {
   text-decoration: none;
   color: inherit;
@@ -24,8 +37,9 @@ a:active {
 body{
   margin: 0;
   padding: 0;
-  background-color: #3FA5D0;
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
+  transition: .25s;
 }
 body, h1, h2, h3 {
   font-family: 'Montserrat' !important;
@@ -46,7 +60,7 @@ input, select {
   padding: 6px 10px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--secondary-color);
 }
 .loginForm{
   width: 400px;
@@ -62,14 +76,6 @@ input, select {
 .text-center{
   text-align: center;
 }
-/* .col{
-  display: flex;
-  flex-direction: column;
-}
-.row{
-  display: flex;
-  flex-direction: row;
-} */
 .justifyStart{
   justify-content: start;
 }
@@ -107,7 +113,6 @@ textarea {
   display: flex;
   align-Items: center;
   justify-content: center;
-  background-color: #3FA5D0;
   border-radius: 5px;
   cursor: pointer;
   margin: 3px;
@@ -117,27 +122,23 @@ textarea {
   transition: .25s;
 }
 .button{
-  border: 3px solid #ffffff;
-  color: #ffffff;
-}
-.testSaveIcon{
-  display: none;
-  position: fixed;
-  z-index: 10000;
-  margin: auto;
+  border: 3px solid var(--secondary-color);
+  background-color: var(--primary-color);
+  color: var(--primary-font-color) !important;
 }
 .buttonblue {
-  border: 3px solid #3FA5D0;
-  background-color: #ffffff;
-  color: #3FA5D0;
+  border: 3px solid var(--primary-color);
+  background-color: var(--secondary-color);
+  color: var(--secondary-font-color);
 }
 .button:hover{
-  background-color: #ffffff;
-  color: #3FA5D0;
+  background-color: var(--secondary-color);
+  color: var(--secondary-font-color) !important;
   transition: 0.25s;
-} .buttonblue:hover{
-  background-color: #3FA5D0;
-  color: #ffffff;
+} 
+.buttonblue:hover{
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
   transition: 0.25s;
 }
 .block{
@@ -181,27 +182,25 @@ button{
   top: 0px;
   width: 100px;
 }
-.inputHovered {
-  border: 3px solid #3FA5D0 !important;
-  border-radius: 3px;
-  -webkit-transition: 0.25s;
-  -moz-transition: 0.25s;
-  -o-transition: 0.25s;
-  transition: 0.25s;
-}
-.inputNotHovered {
+.textinput {
   border: 3px solid transparent !important;
   -webkit-transition: 0.25s;
   -moz-transition: 0.25s;
   -o-transition: 0.25s;
   transition: 0.25s;
 }
+.textinput:hover {
+  border: 3px solid var(--primary-color) !important;
+  border-radius: 3px;
+}
+
 .page {
-  width: 21cm;
-  height: 29.7cm;
+  width: var(--page-width);
+  height: var(--page-height);
+  position: relative;
   padding: 2.54cm 2.54cm 1cm 2.54cm;
   border: 1px solid #efefef;
-  background-color: #ffffff;
+  background-color: var(--secondary-color);
   margin: 20px auto !important; 
   box-shadow: 8px 8px 5px #888;
   color: #000000;
@@ -209,8 +208,8 @@ button{
   font-weight: normal;
 }
 .page .button {
-  border: 3px solid #3FA5D0;
-  color: #3FA5D0;
+  border: 3px solid var(--primary-color);
+  color: var(--secondary-font-color);
 }
 .loadIcon {
   display: none;
@@ -230,32 +229,12 @@ button{
   left: 0px;
   transition: .25s;
 }
-/* @keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0px);
-  }
-  100% {
-    opacity: 0;
-    transfrorm: translateY(-100px);
-  }
-}
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  100% {
-    opacity: 1;
-    transfrorm: translateY(0px);
-  }
-} */ 
 
 .selected {
   background-color: #229944 !important;
   /* background-color: #444 !important; */
   border-color: #23a873 !important;
-  color: #ffffff;
+  color: var(--secondary-font-color);
 }
 .unselected {
   background-color: transparent !important;
@@ -299,10 +278,11 @@ button{
     height: 0px,
   }
   .page {
-    width: 21cm;
-    height: 29.7cm;
-    padding: 2.54cm;
-    margin: 0;
+    position: relative;
+    padding: 2.54cm 2.54cm 1cm 2.54cm;
+    width: var(--page-width);
+    height: var(--page-height);
+    margin: 0 !important;
     border: none;
     box-shadow: none;
     font-family: 'Montserrat' !important;
@@ -316,38 +296,21 @@ button{
   body{
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
-    color: #3FA5D0;
+    background-color: var(--secondary-color);
+    color: var(--secondary-font-color);
   }
   .header{
-    background-color: #3fa5d0;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--secondary-font-color);
   }
-  /* .button {
-    top: 20px;
-    display: flex;
-    align-Items: center;
-    justify-content: center;
-    background-color: transparent;
-    border: 3px solid #3FA5D0;
-    color: #3FA5D0;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 3px;
-    padding: 5px;
-    max-width: 140px;
-    max-height: 16px;
-    font-weight: bold;
-    transition: .25s;
-  } */
   .page {
     width: 600px;
-    height: 29.7cm;
+    height: var(--page-height);
     padding: 20px;
     margin: 0;
     border: none;
     border-bottom: 1px dashed black;
-    background-color: #ffffff;
+    background-color: var(--secondary-color);
     box-shadow: none;
     color: #000000;
     font-family: 'Montserrat' !important;

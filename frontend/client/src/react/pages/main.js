@@ -13,17 +13,17 @@ class Main extends Component {
     super(props);
     this.state = {
       user: '',
-      tests: [],
-      testStates: []
+      testIds: [],
+      testNames: []
     };
   }
 
   getUser = (username) => {
     this.setState({user: username});
   }
-  getTests = (newTests, newTestStates) => {
-    if (this.state.tests.length !== newTests.length) {
-      this.setState({tests: newTests, testStates: newTestStates});
+  getTests = (newTestIds, newTestNames) => {
+    if (this.state.testIds.length !== newTestIds.length) {
+      this.setState({testIds: newTestIds, testNames: newTestNames});
     }
   }
   render() {
@@ -41,7 +41,7 @@ class Main extends Component {
           <Route exact path='/' component={() => (<SignInPage getUser={this.getUser}/>)}/>
           <PrivateRoute
             path='/home'
-            component={() => (<Home user={this.state.user} tests={this.state.tests} getTests={this.getTests}/>)}/>
+            component={() => (<Home user={this.state.user} testIds={this.state.testIds} testNames={this.state.testNames} getTests={this.getTests}/>)}/>
           <PrivateRoute
             exact
             path='/basic'
@@ -52,7 +52,7 @@ class Main extends Component {
             component={() => (<Grade user={this.state.user}/>)}/> 
           {this
             .state
-            .tests
+            .testIds
             .map((test, i) => <PrivateRoute
               key={i}
               exact

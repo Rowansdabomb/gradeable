@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var ImageModel = require('./imagemodel.js');
 
 var TestSchema = new mongoose.Schema({
   testName: {
@@ -8,11 +9,9 @@ var TestSchema = new mongoose.Schema({
   },
   testId: {
     type: String,
-    // unique: true,
     required: true,
     trim: true
   },
-  // cyclic dependency error due to this block of code
   testState: {
     type: String,
     required: true,
@@ -22,6 +21,7 @@ var TestSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  imageIds: [ImageModel.schema],
 });
 
 // TestSchema.pre('save', function (next) {

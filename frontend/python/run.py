@@ -1,18 +1,21 @@
 from multiimage import multiImage
 from name import getName
+from pymongo import MongoClient
 # from getqrcode import getQRCode
 from getroi import getROI
 import numpy as np
 import functions
 import cv2
 import time
+import sys
 
+userId = sys.argv[1]
+client = MongoClient('mongodb://localhost:27017/')
+db = client.hundop
+print(db)
 start = time.clock()
 print('run.py started')
-# multiImage()
-# getName(10, 16)
-# getQRCode()
-# getROI()
+
 image = cv2.imread('GradeA-1.png')
 pageH, pageW = image.shape[:2]
 

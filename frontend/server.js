@@ -115,12 +115,11 @@ app.post('/api/testsave', function(req, res) {
             user.tests[i].testState = req.body.testState;
             flag = false;
           }
+
         }
         if (flag) {
           console.log('test not found');
-          user
-            .tests
-            .push({
+          user.tests.push({
               testId: req.body.testId,
               testName: req.body.testName,
               testState: req.body.testState
@@ -131,6 +130,7 @@ app.post('/api/testsave', function(req, res) {
           .save(function(err) {
             if (err)
               return res.send(err);
+            res.sendStatus(200);
             console.log('test saved');
           });
 
@@ -141,39 +141,35 @@ app.post('/api/testsave', function(req, res) {
 app.get('/api/authenticate', function(req, res) {
   User
     .findById(req.session.userId, function(err, user) {
-      console.log('check user authentication');
       if (err || !user) {
-
         let message = {
           'isAuthenticated': false
         };
-        console.log(message);
         res.send(message);
       } else {
         let message = {
           'isAuthenticated': true
         };
-        console.log(message);
         res.send(message);
       }
     });
 });
-
 app.get('/api/testids', function(req, res) {
-  console.log('get testids and teststates');
   User.findById(req.session.userId, function(err, user) {
     let testIds = [];
+    let testNames = [];
     for (i = 0; i < user.tests.length; i++) {
       testIds.push(user.tests[i].testId);
+      testNames.push(user.tests[i].testName);
     }
     let message = {
-      'testIds': testIds
+      'testIds': testIds,
+      'testNames': testNames
     };
     res.send(message);
   });
 });
 app.post('/api/teststate', function(req, res) {
-  console.log('get teststate for: ' + req.body.testId);
   User.findById(req.session.userId, function(err, user) {
     let testState = '';
     for (i = 0; i < user.tests.length; i++) {
@@ -196,112 +192,52 @@ mongoose.connect(url, function(err, db) {
   }
 });
 
-// ==========================// 
-// configure storage //hardcoded, should be
-// automated 
-// const userDir = './uploads';
-// const testDir = '/test';
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     /* Files will be saved in the 'uploads' directory. Make
-//           sure this directory already exists!     */
-//     cb(null, './uploads');
-//     // cb(null, userDir + testDir + '/ungraded_images');
-//   },
-//   filename: (req, file, cb) => {
-//     /* uuidv4() will generate a random ID that we'll use for the new filename. We use
-//     path.extname() to get the extension from the original file name and add
-//     that to the new generated ID. These combined will create the file name
-//     used to save the file on the server and will be available as
-//     req.file.pathname in the router handler.     */
-//     const newFilename = `${path.basename(file.originalname)}`;
-//     // const newFilename = `${path.extname(file.originalname)}`;     
-//     cb(null, newFilename);
-//   },
-// });
-// // // create the multer instance that will be used to upload/save the file 
-// const upload = multer({
-//    storage
-// });
-// // app.use(bodyParser.json());
-// // app.use(bodyParser.urlencoded({
-// //   extended: true
-// // }));
-  /*     We now have a new req.file object here. At this point the file has been 
-  saved and the req.file.filename value will be the name returned by the filename() function
-  defined in the diskStorage configuration. Other form fields     are
-  available here in req.body.   */
-// app.post('/api/upload', upload.array('selectedFiles'), (req, res) => {
-//   /*     We now have a new req.file object here. At this point the file has been 
-//   saved and the req.file.filename value will be the name returned by the filename() function
-//   defined in the diskStorage configuration. Other form fields     are
-//   available here in req.body.   */
-
-//   console.log(req.body); 
-//   res.send();
-// });
-
 app.post('/api/upload', multiparty, (req, res) => {
   var db = mongoose.connection.db;
   var mongoDriver = mongoose.mongo;
   var gfs = new Gridfs(db, mongoDriver);
-  console.log('req.files.selectedFiles.name: ' + req.files.selectedFiles.name);
-
-  var writestream = gfs.createWriteStream({
-    filename: req.files.selectedFiles.name,
-    mode: 'w',
-    content_type: req.files.selectedFiles.mimetype,
-    metadata: req.body
-  });
-
-  fs.createReadStream(req.files.selectedFiles.path).pipe(writestream);
-  writestream.on('close', function(file) {
-    User.findById(req.session.userId, function(err, user) {
-      if(err){
-        let message = {
-          'message': 'error writeing file to server'
-        };
-        return res.send(JSON.stringify(message));
-      }else if(!user){
-        let message = {
-          'message': 'could not verify user'
-        };
-        return res.send(JSON.stringify(message));
-      } 
-       console.log('user: ' + user + ' file._id: ' + file._id);
-      // gfs.exist({_id: mongoose.Types.ObjectId(file._id)}, function (err, found) {
-      //   if (err){
-      //     console.log('error: ', err);
-      //     throw err;
-      //   }
-      //   if(found){
-      //     console.log('File does not exist, push id to imageIds');
-          user.imageIds.push({imageId: file._id});
-      //   }else{
-      //     console.log('File exists, rewrite imageId');
-      //     for(let i = 0; i < user.imageIds.length; i++){
-      //       if(user.imageIds[i].imageId === file._id){
-      //         user.imageIds[i].imageId = file._id;
-      //       }
-      //     }
-      //   }
-      // });
-       
-       user.save(function(err, updatedUser) {
+  for(i in req.files.selectedFiles){
+    console.log('req.files.selectedFiles[i].name: ' + req.files.selectedFiles[i].name);
+    console.log('req.files.selectedFiles[i].path: ' + req.files.selectedFiles[i].path);
+    var writestream = gfs.createWriteStream({
+      filename: req.files.selectedFiles[i].name,
+      mode: 'w',
+      content_type: req.files.selectedFiles[i].mimetype,
+      metadata: req.body
+    });
+    fs.createReadStream(req.files.selectedFiles[i].path).pipe(writestream);
+    writestream.on('close', function(file) {
+      User.findById(req.session.userId, function(err, user) {
         if(err){
           let message = {
-            'message': 'error saving file to server'
+            'message': 'error writeing file to server'
           };
           return res.send(JSON.stringify(message));
-        }
-        // return res.json(200, updatedUser)
-       })
-     });
-     fs.unlink(req.files.selectedFiles.path, function(err) {
-       // handle error
-       console.log('success!')
-     });
-  });
+        }else if(!user){
+          let message = {
+            'message': 'could not verify user'
+          };
+          return res.send(JSON.stringify(message));
+        } 
+        
+        user.tempImages.push({imageId: file._id});
+        
+        user.save(function(err, updatedUser) {
+          if(err){
+            let message = {
+              'message': 'error saving file to server'
+            };
+            return res.send(JSON.stringify(message));
+          }
+          return res.sendStatus(200);
+        })
+      });
+      fs.unlink(req.files.selectedFiles[i].path, function(err) {
+        // handle error
+        console.log('success!')
+      });
+    });
+  }
 });
 
 app.get('/api/imagetest', function(req, res) {
@@ -326,11 +262,11 @@ app.get('/api/imagetest', function(req, res) {
       };
       return res.send(JSON.stringify(message));
     } 
-    console.log('user.imageIds ' + user.imageIds);
+    console.log('user.tempImages ' + user.tempImages);
 
     //for test purposes we hardcode which imageId
     var readstream = gfs.createReadStream({ 
-      _id: mongoose.Types.ObjectId(user.imageIds[0].imageId) 
+      _id: mongoose.Types.ObjectId(user.tempImages[0].imageId) 
     });
     readstream.on('error', function(err){
       console.log('error: ', err);
@@ -345,19 +281,14 @@ app.get('/api/imagetest', function(req, res) {
 /*
  * Grade test function
  */
-function call_python(x, callback) {
+function call_python(x, userId, callback) {
   const spawn = require('child_process').spawn;
-  const ls = spawn('python', ['./python/run.py']);
-
-  ls
-    .stdout
-    .on('data', (data) => {
+  const ls = spawn('python', ['./python/run.py', userId]);
+  ls.stdout.on('data', (data) => {
       x = `${data}`;
     });
 
-  ls
-    .stderr
-    .on('data', (data) => {
+  ls.stderr.on('data', (data) => {
       console.log(`stderr: ${data}`);
     });
 
@@ -368,12 +299,12 @@ function call_python(x, callback) {
   });
 }
 
-app
-  .get('/api/hello', function(req, res) {
+app.post('/api/gradetests', function(req, res) {
     var x = 'init';
-    call_python(x, function(data) {
+    console.log(req.session.userId);
+    call_python(x, req.session.userId, function(data) {
       res.send({
-        express: data
+        message: data
       });
     });
   });

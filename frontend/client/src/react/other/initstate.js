@@ -4,7 +4,7 @@ import {initNQ, defaultBubbleValues, defaultQuestionValue, defaultAnswers} from 
 var initState = {
   // testId: makeid(20),
   pageStart: [0],
-  pageEnd: [6],
+  pageEnd: [5],
   pages: [1],
   firstQuestionHeights: [],
   pageHeight: 0,

@@ -4,8 +4,12 @@ import HeaderRoute from '../components/headerroute';
 import axios from 'axios';
 import initState from '../other/initstate';
 
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as actions from '../../redux/actions/actions';
+
 import Loader from '../components/loader';
-// import {headerHeight} from '../other/constants';
+import newTestState from '../../redux/reducers/newteststate';
 
 class TestBuilderPage extends Component {
   constructor(props) {
@@ -15,7 +19,6 @@ class TestBuilderPage extends Component {
       saving: false,
     };
   }
-
   componentDidMount() {
     this.getTestState();
     console.log('testbuilderpage updated!');
@@ -30,6 +33,7 @@ class TestBuilderPage extends Component {
       saving: false
     })
   }
+
   getTestState = () => {
     if (!this.props.new) {
       axios
@@ -37,13 +41,17 @@ class TestBuilderPage extends Component {
         testId: String(this.props.testId)
       })
         .then(res => {
+          console.log(JSON.parse(res.data.testState));
+          this.props.actions.initteststate(JSON.parse(res.data.testState));
           this.setState({
-            testState: JSON.parse(res.data.testState)
+            testState: true
           });
         })
-    } else{
+    } 
+    else{
+      this.props.actions.initteststate(newTestState);
       this.setState({
-        testState: initState,
+        testState: true,
       })
     }
   }
@@ -53,12 +61,11 @@ class TestBuilderPage extends Component {
         <div>
           <HeaderRoute user={this.props.user}/>
           <TestBuilder
-            // new={this.props.new}
             preSave={this.preSave}
             postSave={this.postSave}
             testState={this.state.testState}
             testId={this.props.testId}/>
-          {this.state.saving && <Loader text={'saving'} show={true}/>}
+          
         </div>
       );
     } else {
@@ -70,4 +77,12 @@ class TestBuilderPage extends Component {
   }
 }
 
-export default TestBuilderPage;
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+export default connect(
+  null,
+  mapDispatchToProps
+)(TestBuilderPage);

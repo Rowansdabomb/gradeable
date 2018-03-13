@@ -1,17 +1,19 @@
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 const AnswerKey = props => {
     return (
       <div>
         Answer Key
         <div style={styles.column}>
           {
-              props.answerKey.map(function(object, i){
+              props.selectedAnswer.map(function(object, i){
                 let question = 0;
                 let page = 0;
-                props.pageStart.forEach(function(item){
+                props.pageStarts.forEach(function(item){
                   if(i >= item){
-                    page = props.pageStart.indexOf(item);
+                    page = props.pageStarts.indexOf(item);
                   }
                 });
 
@@ -25,7 +27,7 @@ const AnswerKey = props => {
                   throw new Error("Too many questions! Please keep tests under 1000 questions, think of your poor students");
                 }
                 return <div style={{fontFamily: "monospace"}} key={i}>{ page + ', ' + question + ', '
-                 + props.answerKey[i] + ', ' + props.numberOfAnswers[i] + ';' }</div>;
+                 + props.selectedAnswer[i] + ', ' + props.answerValues[i].length + ';' }</div>;
   
               })
             }
@@ -41,4 +43,16 @@ const styles = {
   }
 }
 
-export default AnswerKey;
+function mapStateToProps(state) {
+  return {
+    noSelect: state.noSelect,
+    bubbleValues: state.testState.bubbleValues,
+    pageStarts: state.testState.pageStarts,
+    selectedAnswer: state.testState.selectedAnswer,
+    answerValues: state.testState.answerValues
+  };
+}
+export default connect(
+  mapStateToProps,
+  null
+)(AnswerKey);

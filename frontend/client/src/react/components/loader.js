@@ -1,9 +1,7 @@
 import React from 'react';
 
 const Loader = props => {
-  // const showLoader = props.show ? styles.show: styles.hide;
   return (
-    // <div style={showLoader}>
       <div style={styles.fullScreen}>
         <div className="sk-folding-cube">
           <div className="sk-cube1 sk-cube"></div>
@@ -13,7 +11,6 @@ const Loader = props => {
         </div>
         <h3>{props.text}</h3>
       </div>
-    // </div>
   );
 }
 
