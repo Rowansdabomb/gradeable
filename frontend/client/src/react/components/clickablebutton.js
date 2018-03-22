@@ -6,7 +6,6 @@ class ClickableButton extends Component {
     this.props.update();
   }
   render() {
-    // const btnClass = this.state.isHovered ? styles.unhovered: styles.hovered;
     var type;
     var btnType;
     if(this.props.value === '+'){
@@ -28,15 +27,5 @@ class ClickableButton extends Component {
     );
   }
 }
-
-// const styles = {
-//   hovered: {
-//     fontSize: '1.25rem',
-//     transition: '0.25s'
-//   },
-//   unhovered: {
-//     boxShadow: 'none'
-//   }
-// }
 
 export default ClickableButton;

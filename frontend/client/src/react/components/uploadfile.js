@@ -27,45 +27,50 @@ class UploadFile extends Component {
         }
         state.selectedFiles = temp;
         state.fileHistory = state.fileHistory.concat(newFiles);
-       
         break;
       default:
         state[e.target.name] = e.target.value;
     }
-
     this.setState(state);
   }
 
   onSubmit = (e) => {
     e.preventDefault();
     const { description, selectedFiles } = this.state;
-    let formData = new FormData();
     console.log(selectedFiles);
-    formData.append('description', description);
-    for(let i = 0; i < selectedFiles.length; i++){
-        formData.append('selectedFiles', selectedFiles[i]);
-    }
-    // console.log('form data submitted: ' + formData);
-    axios.post('/api/upload', formData)
+    if(selectedFiles){
+      let formData = new FormData();
+      formData.append('description', description);
+      for(let i = 0; i < selectedFiles.length; i++){
+          formData.append('selectedFiles', selectedFiles[i]);
+      }
+      console.log('form data submitted: ' + formData);
+      axios.post('/api/imageTempUpload', formData)
       .then((result) => {
         this.props.update();
       });
+    }
   }
 
   render() {
-    // const { description, selectedFiles } = this.state;
     return (
       <form onSubmit={this.onSubmit}>
         <input
+          style={styles.input}
           type="file"
           name="selectedFiles"
           onChange={this.onChange}
           multiple
         />
-        <button className={'button'} type="submit">Submit</button>
+        <button className={'button'} type="submit">Upload Files</button>
       </form>
     );
   }
 }
-
+const styles={
+  input: {
+    borderRadius: '5px',
+    border: '3px solid white'
+  }
+}
 export default UploadFile;

@@ -9,6 +9,8 @@
   --font-size-sm: .7em;
   --page-width: 21.59cm;
   --page-height: 27.94cm;
+  --border-radius-button: 5px;
+  --border-thickness-button: 3px;
 }
 
 a:link {
@@ -33,6 +35,17 @@ a:active {
 }
 .hoverLink:hover{
   letter-spacing: .05em;
+}
+.hover-trash{
+  opacity: 0;
+  transition: .25s;
+}
+.hover-trash:hover{
+  opacity: 1;
+  font-size: 2em !important;
+  top: -2px !important;
+  right: -2px !important;
+  cursor: pointer;
 }
 body{
   margin: 0;
@@ -62,6 +75,7 @@ input, select {
   display: inline-block;
   border: 1px solid var(--secondary-color);
 }
+
 .loginForm{
   width: 400px;
   max-height: 600px;
@@ -113,9 +127,9 @@ textarea {
   display: flex;
   align-Items: center;
   justify-content: center;
-  border-radius: 5px;
+  border-radius: var(--border-radius-button);
   cursor: pointer;
-  margin: 3px;
+  margin: 3px 0;
   padding: 5px;
   font-weight: bold;
   box-shadow: none;
