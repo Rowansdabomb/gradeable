@@ -1,9 +1,17 @@
 from imutils.perspective import four_point_transform
 from pyzbar.pyzbar import decode
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+import gridfs
 from imutils import contours
 import numpy as np
 import imutils
+
 import cv2
+
+client = MongoClient('mongodb://localhost:27017')
+db = client.hundop
+fs = gridfs.GridFS(db)
 
 # arguments: image - np arrray, 
 # return: transformed paper image (np mat)
@@ -58,7 +66,6 @@ def transformPage(image):
         # piece of paper
         thresh = cv2.threshold(warped, 0, 255,
             cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
-
     else:
         paper = image
         thresh = cv2.threshold(gray, 0, 255,
@@ -79,7 +86,7 @@ def getQR(image, thresh, pageW):
     # approximate size for qrcode
 
     minSize = pageW/10
-    aspect = .05
+    aspect = .1
     # loop over the contours
     for c in cnts:
         # compute the bounding box of the contour, then use the
@@ -105,6 +112,12 @@ def getQR(image, thresh, pageW):
     yend=contours[0][2][0][1]
 
     result = image[ystart:yend, xstart:xend]
+    qrH, qrW = result.shape[:2]
+    if(qrW - qrH != 0):
+      if(qrW > qrH):
+        result = cv2.resize(result, (qrW, qrW))
+      else:
+        result = cv2.resize(result, (qrH, qrH))
     return result
 
 #arguments: qrimage - np matrix
@@ -112,20 +125,25 @@ def getQR(image, thresh, pageW):
 #
 def decodeQR(qrimage):
     qrtext = decode(qrimage)
-    qrtext = str(qrtext[0][0])
-    result = qrtext[2:len(qrtext)-1]
+    # print(qrtext)
+    try:
+      qrtext = str(qrtext[0][0])
+      result = qrtext[2:len(qrtext)-1]
+    except:
+      print('error decoding qr code')
+      result = -1
     return result
 
 #
 #
 #
-def getQuestions(thresh, xstart, ystart):
+def getQuestions(thresh, xstart, ystart, pageH, pageW):
     cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if imutils.is_cv2() else cnts[1]
     questionCnts = []
 
-    qSize = 20
-    aspect = .05
+    qSize = 10
+    aspect = .15
     # loop over the contours
     for c in cnts:
         # compute the bounding box of the contour, then use the
@@ -141,8 +159,7 @@ def getQuestions(thresh, xstart, ystart):
 
     # sort the question contours top-to-bottom, then initialize
     # the total number of correct answers
-    questionCnts = contours.sort_contours(questionCnts,
-        method="top-to-bottom")[0]
+    questionCnts = contours.sort_contours(questionCnts, method="top-to-bottom")[0]
 
     for c in questionCnts:
         i = 0
@@ -155,12 +172,11 @@ def getQuestions(thresh, xstart, ystart):
 # 
 #     
 def gradePage(image, thresh, questionCnts, ANSWER_KEY):
-
     correct = 0
     # create a list of correct answer values
     correctAnswers = []
     for item in ANSWER_KEY:
-        correctAnswers.append(ANSWER_KEY[item][0])
+        correctAnswers.append(item[0])
 
     # each question has n possible answers, to loop over the
     # question in batches of n
@@ -201,24 +217,30 @@ def gradePage(image, thresh, questionCnts, ANSWER_KEY):
             bigcount = bigcount + 1
 
             # check to see if the bubbled answer is correct
-            if k == bubbled[1]:
-                color = (0, 255, 0)
-                correct += 1
+            if(bubbled != None):
+              if k == bubbled[1]:
+                  color = (0, 255, 0)
+                  correct += 1
+            else: 
+              # print(ANSWER_KEY)
+              return -1
 
             # draw the outline of the correct answer on the test
-
-            cv2.drawContours(image, [cnts[k]], -1, color, 10)
-    score = (correct / len(ANSWER_KEY)) * 100
+            cv2.drawContours(image, [cnts[k]], -1, color, 2)
+            # cv2.imshow('correct', image)
+            # cv2.waitKey(0)
+    # score = (correct / len(ANSWER_KEY)) * 100
+    score = str(correct) + '/' + str(len(ANSWER_KEY))
     result = (image, score)
     return result
 
 #arguments: image-np mat, dir- file path for graded image, n- page number of grade image
 #return: none
 #
-def writeImage(image, dir, n):
-    cv2.imwrite(dir + 'page_' + str(n) + '.png', image)
+def writeImage(image, file_path):
+    cv2.imwrite(file_path, image)
 
-def getAnswerKey():
+def getPageAnswerKey():
     f = open("answerkey.txt", "r")
     temp = []
     for line in f:

@@ -20,12 +20,12 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  modified: {
+  created_at: {
     type: Date,
-    default: Date.now
   },
   tests: [Test.schema],
   tempImages: [ImageModel.schema],
+  gradedImages: [ImageModel.schema],
 });
 
 UserSchema.statics.authenticate = function (email, password, callback) {
@@ -49,6 +49,11 @@ UserSchema.statics.authenticate = function (email, password, callback) {
 
 UserSchema.pre('save', function (next) {
   var user = this;
+  let now = new Date();
+  if ( !this.created_at ) {
+    this.created_at = now;
+  }
+
   if (!user.isModified('password')) return next();
 
   bcrypt.genSalt(10, function (err, salt) {

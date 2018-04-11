@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import TestBuilder from '../components/testbuilder';
 import HeaderRoute from '../components/headerroute';
 import axios from 'axios';
-import initState from '../other/initstate';
 
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -64,7 +63,8 @@ class TestBuilderPage extends Component {
             preSave={this.preSave}
             postSave={this.postSave}
             testState={this.state.testState}
-            testId={this.props.testId}/>
+            testId={this.props.testId}
+            testNumber={0}/>
           
         </div>
       );

@@ -1,31 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class ClickableButton extends Component {
-
-  handleClick = () => {
-    this.props.update();
+const ClickableButton = () => {
+  var type;
+  var btnType;
+  if(typeof this.props === 'undefined'){
+    btnType = 'button';
   }
-  render() {
-    var type;
-    var btnType;
-    if(this.props.value === '+'){
-      type = <i className="fa fa-plus" aria-hidden="true"></i>;
-      btnType = 'squareButton';
-    }else if(this.props.value === '-'){
-      type = <i className="fa fa-minus" aria-hidden="true"></i>;
-      btnType = 'squareButton';
-    }else{
-      type = this.props.value;
-      btnType = 'normalButton';
-    };
-    return (
-      <div  className={[btnType, 'buttonblue'].join(' ')}
-            onClick={this.handleClick}
-            >
-        <div>{type}</div>
-      </div>
-    );
+  else if(this.props.value === '+' || this.props.value === '-'){
+    type = <i className="fa fa-plus" aria-hidden="true"></i>;
+    btnType = 'squareButton';
   }
+  else if(this.props.invertColor === true){
+    btnType = 'buttonInverse'
+  }else{
+    btnType = 'button';
+  };
+  return (
+    <div  className={[btnType, ''].join(' ')}
+          onClick={this.props.update}
+          >
+      <div>{type}</div>
+    </div>
+  );
 }
 
 export default ClickableButton;

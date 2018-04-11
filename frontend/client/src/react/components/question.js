@@ -1,7 +1,7 @@
 import React from 'react';
 import Answer from './answer';
 import Input from './input';
-import ClickableButton from './clickablebutton';
+// import ClickableButton from './clickablebutton';
 import { radius, qPadding } from '../other/constants';
 
 import { connect } from 'react-redux';
@@ -63,10 +63,16 @@ class Question extends React.Component {
                 <h3>Answer</h3>
                 <div className={ ['row', 'no-gutters'].join(' ') } style={ styles.row }>
                   <div className={ ['col-5', 'no-gutters'].join(' ') }>
-                    <ClickableButton key={ 0 } update={ this.addAnswer.bind(this) } value='+' />
+                    {/* <ClickableButton key={ 0 } update={ this.addAnswer.bind(this) } value='+' /> */}
+                    <div className={['button', 'squareButton'].join(' ')} onClick={this.addAnswer.bind(this)}>
+                      <i className="fa fa-plus" aria-hidden="true"></i>
+                    </div>
                   </div>
                   <div className={ ['col-5', 'no-gutters'].join(' ') }>
-                    <ClickableButton key={ 1 } update={ this.removeAnswer.bind(this) } value='-' />
+                    {/* <ClickableButton key={ 1 } update={ this.removeAnswer.bind(this) } value='-' /> */}
+                    <div className={['button', 'squareButton'].join(' ')} onClick={this.removeAnswer.bind(this)}>
+                      <i className={"fa fa-minus"} aria-hidden="true"></i>
+                    </div>
                   </div>
                 </div>
               </div>

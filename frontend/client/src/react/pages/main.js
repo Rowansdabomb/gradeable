@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Switch, Route} from 'react-router-dom'
 import SignInPage from './signinpage';
 import Grade from './grade';
-import Basic from './basic';
+import AnalyzePage from './analyzepage';
+import Analyze from './analyze';
 import Home from './home';
 import TestBuilderPage from './testbuilderpage';
 import PrivateRoute from '../components/privateroute';
@@ -14,23 +15,30 @@ class Main extends Component {
     this.state = {
       user: '',
       testIds: [],
-      testNames: []
+      testTitles: [],
+      testCreatedDates: [],
+      testUpdatedDates: []
     };
   }
 
   getUser = (username) => {
     this.setState({user: username});
   }
-  getTests = (newTestIds, newTestNames) => {
+  getTests = (newTestIds, newtestTitles, newTestCreatedDates, newTestUpdatedDates) => {
     if (this.state.testIds.length !== newTestIds.length) {
-      this.setState({testIds: newTestIds, testNames: newTestNames});
+      this.setState({
+        testIds: newTestIds, 
+        testTitles: newtestTitles, 
+        testCreatedDates: newTestCreatedDates,
+        testUpdatedDates: newTestUpdatedDates
+      });
     }
   }
   render() {
     function randomId() {
       let id = "";
       let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < 10; i++) {
         id += possible.charAt(Math.floor(Math.random() * possible.length));
       }
       return id;
@@ -41,23 +49,32 @@ class Main extends Component {
           <Route exact path='/' component={() => (<SignInPage getUser={this.getUser}/>)}/>
           <PrivateRoute
             path='/home'
-            component={() => (<Home user={this.state.user} testIds={this.state.testIds} testNames={this.state.testNames} getTests={this.getTests}/>)}/>
+            component={() => (<Home user={this.state.user} testIds={this.state.testIds} testTitles={this.state.testTitles} testUpdatedDates={this.state.testUpdatedDates} getTests={this.getTests}/>)}/>
           <PrivateRoute
             exact
-            path='/basic'
-            component={() => (<Basic user={this.state.user}/>)}/>
+            path='/analyze'
+            component={() => (<AnalyzePage user={this.state.user} testTitles={this.state.testTitles}/>)}/>
           <PrivateRoute
             exact
             path='/grade'
             component={() => (<Grade user={this.state.user}/>)}/> 
           {this
             .state
-            .testIds
+            .testTitles
             .map((test, i) => <PrivateRoute
               key={i}
               exact
-              path={'/test/' + String(i)}
-              component={() => (<TestBuilderPage user={this.state.user} new={false} testId={test}/>)}/>)
+              path={'/test/analyze/' + String(test).replace(/\s/g,'')}
+              component={() => (<Analyze user={this.state.user} testId={this.state.testIds[i]}/>)}/>)
+          }
+          {this
+            .state
+            .testTitles
+            .map((test, i) => <PrivateRoute
+              key={i}
+              exact
+              path={'/test/' + String(test).replace(/\s/g,'')}
+              component={() => (<TestBuilderPage user={this.state.user} new={false} testId={this.state.testIds[i]}/>)}/>)
           }
           <PrivateRoute
             exact

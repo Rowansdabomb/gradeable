@@ -4,12 +4,24 @@ var ImageSchema = new mongoose.Schema({
   imageId: {
     type: String,
   },
-  tester: {
+  testId: {
+    type: String,
+  },
+  testNumber: {
+    type: Number
+  },
+  testTitle: {
     type: String
   },
-  grade: {
-    type: Number
-  }
+  pageGrade: {
+    type: String
+  },
+  pageNumber: {
+    type: String
+  },
+  studentName: {
+    type: String
+  },
 });
 
 var ImageModel = mongoose.model('ImageModel', ImageSchema);

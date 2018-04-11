@@ -18,10 +18,11 @@ class TestPage extends Component {
                         <div className={ 'fullPageHeight' }>
                           <Questions key={ i } pindex={ i } noSelect={ this.props.noSelect } updatePage={ this.props.updatePage } />
                         </div>
-                        <QR updateQr={ this.props.updateQr } codevalue={ this
-                                                                           .props
-                                                                           .testId
-                                                                           .concat(':' + String(i) + ':' + String(this.props.pageStarts.length)) } />
+                        <QR updateQr={ this.props.updateQr } 
+                          codevalue={ this
+                          .props
+                          .testId
+                          .concat(',' + String(this.props.testNumber) + ',' + String(i) + ',' + String(this.props.pageStarts.length)) } />
                       </div>) }
       </div>
       );

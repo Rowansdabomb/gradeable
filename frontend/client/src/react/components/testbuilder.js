@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-// import _ from 'lodash';
-
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../redux/actions/actions';
@@ -30,14 +28,14 @@ class TestBuilder extends Component {
     window.print();
   }
   saveTest = () => {
-    console.log('testName ' + String(this.props.testTitle));
     this.setState({
       updateQr: true,
       saving: true
     });
+    console.log('testTitle ' + this.props.testState.testTitle);
     axios.post('/api/testsave', {
       testId: String(this.props.testId),
-      testName: String(this.props.testTitle),
+      testTitle: String(this.props.testState.testTitle),
       testState: JSON.stringify(this.props.testState)
     }).then((result) => {
       console.log('save success');
@@ -136,24 +134,29 @@ class TestBuilder extends Component {
   }
   render() {
     return (
-      <div>
-        <TestPage
-          updateQr={false}
-          testId={this.props.testId}
-          updatePage={this.updatePage}
-          />
-        {/* <TestUser
+      <div className={['row', 'no-gutter'].join(' ')}>
+        <div className={['offset-lg-2', 'col-lg-8', 'offset-md-1', 'col-md-10'].join(' ')}>
+          <TestPage
+            updateQr={false}
+            testId={this.props.testId}
+            testNumber={this.props.testNumber}
+            updatePage={this.updatePage}
+            />
+        <TestUser
           updateQr={false}
           codevalue={this
           .props
           .testId
-          .concat(':' + String(this.props.pageStarts.length) + ':' + String(this.props.pageStarts.length))}/> */}
-        <SideBar
-          handlePrint={this.handlePrint}
-          unselect={this.unselect}
-          saveTest={this.saveTest}
-          updatePage={this.updatePage}
-          />
+          .concat(',' + String(this.props.testNumber))}/>
+        </div>
+        <div className={['col-lg-2', 'col-md-1'].join(' ')}>
+          <SideBar
+            handlePrint={this.handlePrint}
+            unselect={this.unselect}
+            saveTest={this.saveTest}
+            updatePage={this.updatePage}
+            />
+        </div>
         {this.state.saving && <Loader text={'saving'} show={true}/>}
       </div>
     )

@@ -217,7 +217,9 @@ function arrayClone( arr ) {
       }
       return copy;
   } else if( typeof arr === 'object' ) {
-      throw 'Cannot clone array containing an object!';
+      var error = {};
+      error.message = 'Cannot clone array containing an object!';
+      throw error;
   } else {
       return arr;
   }

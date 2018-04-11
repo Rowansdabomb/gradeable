@@ -5,7 +5,7 @@ import {Route} from 'react-router-dom';
 
 const HeaderRoute = (props) => {
 	return(
-		<Route render={({ history}) => (
+		<Route render={({history}) => (
             <Header user={props.user} goToUrl={(URL) => {history.push(URL)}}/>
   	)} />
 	);

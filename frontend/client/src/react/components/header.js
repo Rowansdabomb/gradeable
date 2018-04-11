@@ -31,13 +31,13 @@ class Header extends Component {
             <div className={'col-12'}>
               <nav className={ 'row' }>
                 <div className={ [ 'col-md-4'].join(' ') }>
-                  <Link to='/home'>Home</Link>
-                </div>
-                <div className={ 'col-md-4' }>
-                  <Link to='/basic'>Basic</Link>
+                  <Link to='/home'>Create</Link>
                 </div>
                 <div className={ 'col-md-4' }>
                   <Link to='/grade'>Grade</Link>
+                </div>
+                <div className={ 'col-md-4' }>
+                  <Link to='/analyze'>Analyze</Link>
                 </div>
               </nav>
             </div>
@@ -48,7 +48,7 @@ class Header extends Component {
                 Logged In as: <div style={styles.username}>{ this.props.user }</div>
               </div>
               <div className={ ['col-md-6'].join(' ')}>
-                <div className={'buttonblue'} onClick={ this.handleLogout }>
+                <div className={'buttoninverse'} onClick={ this.handleLogout }>
                   logout
                 </div>
               </div>
