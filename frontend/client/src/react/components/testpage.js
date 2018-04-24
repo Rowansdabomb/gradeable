@@ -14,7 +14,7 @@ class TestPage extends Component {
       <div>
         { _
             .range(this.props.pageStarts.length)
-            .map(i => <div key={ i } className={ 'page' } style={ styles.page }>
+            .map(i => <div key={ i } className={ 'page' } id={'page' + String(i)} style={ styles.page }>
                         <div className={ 'fullPageHeight' }>
                           <Questions key={ i } pindex={ i } noSelect={ this.props.noSelect } updatePage={ this.props.updatePage } />
                         </div>
@@ -55,7 +55,6 @@ function mapStateToProps(state) {
     pageStarts: state.testState.pageStarts,
     pageEnds: state.testState.pageEnds,
     questionValues: state.testState.questionValues
-  // bubbleValues: state.testState.bubbleValues
   };
 }
 function mapDispatchToProps(dispatch) {

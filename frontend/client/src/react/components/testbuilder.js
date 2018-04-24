@@ -3,11 +3,12 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../redux/actions/actions';
 import PropTypes from 'prop-types';
-
+import html2canvas from 'html2canvas';
 import Loader from '../components/loader';
 import TestUser from '../components/testuser';
 import TestPage from '../components/testpage';
 import SideBar from '../components/sidebar';
+import _ from 'lodash';
 import {
   defaultAnswerHeight,
   defaultQuestionHeight,
@@ -21,10 +22,15 @@ class TestBuilder extends Component {
     super(props);
     this.state = {
       saving: false,
+      printSetup: false,
+      copies: 1,
     };
   }
   handlePrint = () => {
     this.saveTest();
+    this.setState({
+      printSetup: true
+    });
     window.print();
   }
   saveTest = () => {
@@ -33,16 +39,53 @@ class TestBuilder extends Component {
       saving: true
     });
     console.log('testTitle ' + this.props.testState.testTitle);
-    axios.post('/api/testsave', {
-      testId: String(this.props.testId),
-      testTitle: String(this.props.testState.testTitle),
-      testState: JSON.stringify(this.props.testState)
-    }).then((result) => {
-      console.log('save success');
-      this.setState({
-        saving: false
+    html2canvas(document.querySelector("#page0")).then(canvas => {
+      console.log('canvas', canvas);
+      let resizedCanvas = document.createElement("canvas");
+      let resizedContext = resizedCanvas.getContext("2d");
+
+      resizedCanvas.height = "260";
+      resizedCanvas.width = "200";
+
+      var context = canvas.getContext("2d");
+
+      resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+      var canvasThumbData = resizedCanvas.toDataURL();
+      console.log(canvasThumbData);
+      // document.body.appendChild(resizedCanvas)
+      //   post to /api/testsave as testThumb
+      axios.post('/api/testsave', {
+        testId: String(this.props.testId),
+        testTitle: String(this.props.testState.testTitle),
+        testState: JSON.stringify(this.props.testState),
+        testThumbImage: canvasThumbData
+      }).then((result) => {
+        console.log('save success');
+        this.setState({
+          saving: false
+        });
       });
     });
+
+  }
+  handleCopies = (increment) => {
+    console.log(increment);
+    if(increment){
+      if(this.state.copies < 100){
+        this.setState(prevState => ({
+          copies: prevState.copies + 1
+        }));
+      }
+      else{
+        alert('A maximum of 99 copies is permitted at this time');
+      }
+    } 
+    else if(this.state.copies > 1){
+      this.setState(prevState => ({
+        copies: prevState.copies - 1
+      }));
+    }
+
   }
   unselect = () => {
     this.props.actions.noSelect();
@@ -122,7 +165,7 @@ class TestBuilder extends Component {
       }
     }
 
-    //find heights of all first question, determine if fit on prev page
+    //find heights of all first question, determine if they fit on prev page
   }
   shouldComponentUpdate(nextProps, nextState) {
     return true;
@@ -136,28 +179,35 @@ class TestBuilder extends Component {
     return (
       <div className={['row', 'no-gutter'].join(' ')}>
         <div className={['offset-lg-2', 'col-lg-8', 'offset-md-1', 'col-md-10'].join(' ')}>
-          <TestPage
-            updateQr={false}
-            testId={this.props.testId}
-            testNumber={this.props.testNumber}
-            updatePage={this.updatePage}
-            />
-        <TestUser
-          updateQr={false}
-          codevalue={this
-          .props
-          .testId
-          .concat(',' + String(this.props.testNumber))}/>
+          {_.range(this.state.copies).map(index => 
+            <div key={'copy_' + String(index)}>
+              <TestPage
+              updateQr={false}
+              testId={this.props.testId}
+              testNumber={index}
+              updatePage={this.updatePage}
+              />
+              <TestUser
+                updateQr={false}
+                codevalue={this
+                .props
+                .testId
+                .concat(',' + String(index))}/>
+            </div>
+          )}
         </div>
+
         <div className={['col-lg-2', 'col-md-1'].join(' ')}>
           <SideBar
             handlePrint={this.handlePrint}
+            handleCopies={this.handleCopies}
+            copies={this.state.copies}
             unselect={this.unselect}
             saveTest={this.saveTest}
             updatePage={this.updatePage}
             />
         </div>
-        {this.state.saving && <Loader text={'saving'} show={true}/>}
+        {this.state.saving && <Loader text={'saving'} fullScreen={true}/>}
       </div>
     )
   }

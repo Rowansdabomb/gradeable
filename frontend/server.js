@@ -19,7 +19,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 //use sessions for tracking logins
 app.use(session({
   secret: 'work hard',
@@ -28,7 +27,7 @@ app.use(session({
 // store: new MongoStore({   mongooseConnection: db })
 }));
 app.post('/api/signin', function(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   if (req.body.email && req.body.username && req.body.password && req.body.type === 'signup') {
     var userData = {
       email: req.body.email,
@@ -37,9 +36,9 @@ app.post('/api/signin', function(req, res) {
     }
     User.create(userData, function(error, user) {
       if (error) {
-        console.log(error);
+        // console.log(error);
         if (error.code === 11000) {
-          console.log('duplicate');
+          // console.log('duplicate');
           return res.send('duplicate');
 
         } else {
@@ -59,7 +58,7 @@ app.post('/api/signin', function(req, res) {
     User
       .authenticate(req.body.email, req.body.password, function(error, user) {
         if (error || !user) {
-          console.log('error: ' + user);
+          // console.log('error: ' + user);
           var err = new Error('Wrong email or password.');
           err.status = 401;
           return res.send(err);
@@ -96,35 +95,73 @@ app.post('/api/logout', function(req, res) {
       });
   }
 });
+
+
+app.delete('/api/deleteTest', function(req,res){
+  // console.log(req.query.testId);
+  var db = mongoose.connection.db;
+  mongoose.model('User').update(
+    {_id: req.session.userId},
+    {$pull: {gradedImages: {testId: req.query.testId}}},
+    function(err, numAffected){
+      if(err){
+        console.log('Error pulling gradedimages: ' + numAffected);
+      }
+    }
+  );
+
+  User
+    .findById(req.session.userId, function(err, user) {
+      for (i = 0; i < user.tests.length; i++) {
+        if (user.tests[i].testId === req.query.testId) {
+          let file_id = user.tests[i]._id;
+          // let testId = user.tests[i].testId;
+          // console.log(testId);
+          // for(let i = 0; i < user.gradedImages.length; i++){
+          //   user.gradedImages.testId()
+          // }
+          user.tests.pull(file_id);
+          // user.gradedImages.pull({'imageId:': testId});
+        }
+      }
+      user
+        .save(function(err) {
+          if (err)
+            return res.send(err);
+          res.sendStatus(200);
+          // console.log('test deleted');
+        });
+    });
+
+})
 app.post('/api/testsave', function(req, res) {
   if (req.body.testId && req.body.testTitle && req.body.testState) {
     User
       .findById(req.session.userId, function(err, user) {
         let flag = true;
         for (i = 0; i < user.tests.length; i++) {
-          console.log(user.tests[i].testId, req.body.testId);
+          // console.log(user.tests[i].testId, req.body.testId);
           if (user.tests[i].testId === req.body.testId) {
-            console.log('test found', req.body.testTitle);
+            // console.log('test found', req.body.testTitle);
             user.tests[i].testTitle = req.body.testTitle;
             user.tests[i].testState = req.body.testState;
+            user.tests[i].thumbImage = req.body.testThumbImage;
             flag = false;
           }
         }
         if (flag) {
-          console.log('test not found');
+          // console.log('test not found');
           user.tests.push({
               testId: req.body.testId,
               testTitle: req.body.testTitle,
               testState: req.body.testState
             });
         }
-
-        user
-          .save(function(err) {
+        user.save(function(err) {
             if (err)
               return res.send(err);
             res.sendStatus(200);
-            console.log('test saved');
+            // console.log('test saved');
           });
 
       });
@@ -148,21 +185,25 @@ app.get('/api/authenticate', function(req, res) {
     });
 });
 
+
 app.get('/api/testdata', function(req, res) {
   User.findById(req.session.userId, function(err, user) {
     let testIds = [];
     let testTitles = [];
     let testCreatedDates = [];
     let testUpdatedDates = [];
+    let testThumbImage = [];
     for (i = 0; i < user.tests.length; i++) {
       testIds.push(user.tests[i].testId);
       testTitles.push(user.tests[i].testTitle);
       testCreatedDates.push(user.tests[i].created_at);
       testUpdatedDates.push(user.tests[i].updated_at);
+      thumbImage.push(user.tests[i].thumbImage)
     }
     let message = {
       'testIds': testIds,
       'testTitles': testTitles,
+      'testThumbImage': thumbImage,
       'testCreatedDates': testCreatedDates,
       'testUpdatedDates': testUpdatedDates
     };
@@ -186,16 +227,16 @@ app.post('/api/teststate', function(req, res) {
 //==========================// ====MONGOOSE CONNECT===//
 mongoose.connect(url, function(err, db) {
   if (err) {
-    console.log('Unable to connect to the mongoDB server. Error:', err);
+    // console.log('Unable to connect to the mongoDB server. Error:', err);
   } else {
-    console.log('Connection established to', url);
+    // console.log('Connection established to', url);
   }
 });
 app.post('/api/tempFileUpload', multiparty, (req, res) => {
   var db = mongoose.connection.db;
   var mongoDriver = mongoose.mongo;
   var gfs = new Gridfs(db, mongoDriver);
-  console.log('req.files.selectedFiles = ' + JSON.stringify(req.files.selectedFiles));
+  // console.log('req.files.selectedFiles = ' + JSON.stringify(req.files.selectedFiles));
   if(typeof req.files.selectedFiles.length === 'undefined'){
     var writestream = gfs.createWriteStream({
       filename: req.files.selectedFiles.name,
@@ -208,6 +249,7 @@ app.post('/api/tempFileUpload', multiparty, (req, res) => {
       User.findById(req.session.userId, function(err, user) {
         if(err){
           let message = {
+
             'message': 'error writeing file to server'
           };
           return res.send(JSON.stringify(message));
@@ -230,7 +272,7 @@ app.post('/api/tempFileUpload', multiparty, (req, res) => {
       });
       fs.unlink(req.files.selectedFiles.path, function(err) {
         // handle error
-        console.log('success! imageTempUpload');
+        // console.log('success! imageTempUpload');
       });
     });
   }
@@ -247,43 +289,43 @@ app.post('/api/tempFileUpload', multiparty, (req, res) => {
       writestream.on('close', function(file) {
         User.findById(req.session.userId, function(err, user) {
           if(err){
-            console.log('error finding user');
+            // console.log('error finding user');
             return res.sendStatus(500);
           }else if(!user){
-            console.log('could not verify user');
+            // console.log('could not verify user');
             return res.sendStatus(401);
           } 
           user.tempImages.push({imageId: file._id});
           user.save(function(err, updatedUser) {
             if(err){
-              console.lof('error saving file to server');
+              // console.lof('error saving file to server');
               return res.sendStatus(500);
             }
           })
         });
         fs.unlink(req.files.selectedFiles[i].path, function(err) {
           // handle error
-          console.log('success! imageTempUpload');
+          // console.log('success! imageTempUpload');
         });
       });
     }
     return res.sendStatus(200);
   }
   else{
-    console.log('error: (negative) req.files.selectedFiles.length');
+    // console.log('error: (negative) req.files.selectedFiles.length');
   }
 });
 
 app.get('/test/analyze/api/getTestTakers', function(req, res){
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       let message = {
         'message': 'error writeing file to server'
       };
       return res.send(JSON.stringify(message));
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       let message = {
         'message': 'could not verify user'
       };
@@ -292,34 +334,33 @@ app.get('/test/analyze/api/getTestTakers', function(req, res){
     //get data for testTakers of req.query.testId
     let flag = false;
     let tempArray = [];
-    console.log(req.query.testId)
+    // console.log(req.query.testId)
     for(let i = 0; i < user.gradedImages.length; i++){
-      console.log(i, user.gradedImages[i]);
+      // // console.log(i, user.gradedImages[i]);
       if(user.gradedImages[i].testId === req.query.testId){
         tempArray.push(user.gradedImages[i]);
       }
     }
     if(tempArray.length < 1){
-      console.log('Exam with testID ' + req.query.testId + ' not graded')
+      // console.log('Exam with testID ' + req.query.testId + ' not graded')
       res.sendStatus(503);
     }
     else{
       res.send(JSON.stringify(tempArray));
     }
-    // console.log('tempArray: ' + tempArray);
   });
 })
+
 app.get('/api/imageGradedId', function(req, res) {
-  // console.log('imageGradedId called');
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       let message = {
         'message': 'error writeing file to server'
       };
       return res.send(JSON.stringify(message));
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       let message = {
         'message': 'could not verify user'
       };
@@ -328,14 +369,14 @@ app.get('/api/imageGradedId', function(req, res) {
 
     let length = user.gradedImages.length;
     if(typeof length === 'undefined'){
-      console.log('success! imageGradedId');
+      // console.log('success! imageGradedId');
       res.send({
         'length': 1,
         'imageIds': user.gradedImages
       })
     }
     else{
-      console.log('success! imageTempId');
+      // console.log('success! imageTempId');
       res.send({
         'length': length,
         'imageIds': user.gradedImages
@@ -344,16 +385,16 @@ app.get('/api/imageGradedId', function(req, res) {
   });
 });
 app.get('/api/imageTempId', function(req, res) {
-  console.log('imageTempId called');
+  // console.log('imageTempId called');
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       let message = {
         'message': 'error writeing file to server'
       };
       return res.send(JSON.stringify(message));
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       let message = {
         'message': 'could not verify user'
       };
@@ -361,14 +402,14 @@ app.get('/api/imageTempId', function(req, res) {
     }
     let length = user.tempImages.length;
     if(typeof length === 'undefined'){
-      console.log('success! imageTempId');
+      // console.log('success! imageTempId');
       res.send({
         'length': 1,
         'imageIds': user.tempImages
       })
     }
     else{
-      console.log('success! imageTempId');
+      // console.log('success! imageTempId');
       res.send({
         'length': length,
         'imageIds': user.tempImages
@@ -379,23 +420,23 @@ app.get('/api/imageTempId', function(req, res) {
 app.get('/api/imageTempThumb', function(req, res) {
   var db = mongoose.connection.db;
   var mongoDriver = mongoose.mongo;
-  // console.log(db, mongoDriver);
+  // // console.log(db, mongoDriver);
   var gfs = new Gridfs(db, mongoDriver);
   let fileId = '';
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       return res.sendStatus(500);
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       return res.sendStatus(500);
     } 
-    console.log(req.query.imageId);
+    // console.log(req.query.imageId);
     var readstream = gfs.createReadStream({ 
       _id: mongoose.Types.ObjectId(req.query.imageId)
     });
     readstream.on('error', function(err){
-      console.log('error: ', err);
+      // console.log('error: ', err);
       throw err;
     });
     readstream.pipe(res);
@@ -405,20 +446,20 @@ app.get('/api/deleteGradedImage', function(req, res){
   var db = mongoose.connection.db;
   var mongoDriver = mongoose.mongo;
   var gfs = new Gridfs(db, mongoDriver);
-  console.log('delete called with id: ' + req.query.file_id);
+  // console.log('delete called with id: ' + req.query.file_id);
   gfs.remove({ _id: String(req.query.file_id) }, (err) => {
-    if (err) console.log(err)
+    if (err) // console.log(err)
     res.sendStatus(204)
   });
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       let message = {
         'message': 'error writeing file to server'
       };
       return res.send(JSON.stringify(message));
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       let message = {
         'message': 'could not verify user'
       };
@@ -427,7 +468,7 @@ app.get('/api/deleteGradedImage', function(req, res){
     user.gradedImages.pull(req.query.file_id);
     user.save(function (err) {
       if (err) return handleError(err);
-      console.log('success! deleteTempImage');
+      // console.log('success! deleteTempImage');
     });
   });
 });
@@ -435,20 +476,20 @@ app.get('/api/deleteTempImage', function(req, res){
   var db = mongoose.connection.db;
   var mongoDriver = mongoose.mongo;
   var gfs = new Gridfs(db, mongoDriver);
-  console.log('delete called with id: ' + req.query.file_id);
+  // console.log('delete called with id: ' + req.query.file_id);
   gfs.remove({ _id: String(req.query.file_id) }, (err) => {
-    if (err) console.log(err)
+    if (err) // console.log(err)
     res.sendStatus(204)
   });
   User.findById(req.session.userId, function(err, user) {
     if(err){
-      console.log('error');
+      // console.log('error');
       let message = {
         'message': 'error writeing file to server'
       };
       return res.send(JSON.stringify(message));
     }else if(!user){
-      console.log('no user');
+      // console.log('no user');
       let message = {
         'message': 'could not verify user'
       };
@@ -457,7 +498,7 @@ app.get('/api/deleteTempImage', function(req, res){
     user.tempImages.pull(req.query.file_id);
     user.save(function (err) {
       if (err) return handleError(err);
-      console.log('success! deleteTempImage');
+      // console.log('success! deleteTempImage');
     });
   });
 });
@@ -485,7 +526,7 @@ function call_python(x, userId, callback) {
 }
 app.post('/api/gradetests', function(req, res) {
     var x = 'init';
-    console.log('userID: ' + req.session.userId);
+    // console.log('userID: ' + req.session.userId);
     call_python(x, req.session.userId, function(data) {
       res.send({
         message: data

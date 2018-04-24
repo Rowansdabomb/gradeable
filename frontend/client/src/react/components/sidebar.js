@@ -41,8 +41,6 @@ class SideBar extends Component {
           <div>
             <h3>Question</h3>
             <div className={['buttons', 'spaceBetween'].join(' ')} style={styles.buttons}>
-              {/* <ClickableButton update={this.addQuestion} value='+'/>
-              <ClickableButton update={this.removeQuestion} value='-'/> */}
               <div className={'button'} onClick={this.addQuestion}>
                 <i className="fa fa-plus" aria-hidden="true"></i>
               </div>
@@ -55,11 +53,16 @@ class SideBar extends Component {
             pageStart={this.props.pageStarts}
             answerKey={this.props.selectedAnswer}
             numberOfAnswers={this.props.numberOfAnswers}/>
-          {/* <ClickableButton update={this.props.handlePrint} value={'Print'}/>
-          <ClickableButton update={this.props.unselect} value={'Toggle'}/>
-          <ClickableButton update={this.props.saveTest} value={'Save'}/> */}
           <div className={'button'} onClick={this.props.handlePrint}>
-            Print
+            Print {this.props.copies}
+          </div>
+          <div className={['row', 'no-gutters'].join(' ')}>
+            <div className={['button', 'col-5'].join(' ')} onClick={() => {this.props.handleCopies(true)}}>
+              <i className="fa fa-plus" aria-hidden="true"></i>
+            </div>
+            <div className={['button', 'col-5', 'offset-2'].join(' ')} onClick={() => {this.props.handleCopies(false)}}>
+              <i className="fa fa-minus" aria-hidden="true"></i>
+            </div>
           </div>
           <div className={'button'} onClick={this.props.unselect}>
             Toggle

@@ -8,7 +8,7 @@ class TestUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bubbles: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+      bubbles: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ '.split(''),
       firstname: 'firstnames'.split(''),
       lastname: 'lastnamesarelong'.split('')
     };
@@ -25,8 +25,7 @@ class TestUser extends Component {
       <div className={'page'} style={styles.page}>
         <div style={styles.row}>
           <div id={'firstname'} style={styles.name}>
-            <p style={styles.namefont}>First Name
-            </p>
+            <h1 style={styles.headermargin}>First Name</h1>
             <div
               style={{
               ...styles.row,
@@ -40,9 +39,8 @@ class TestUser extends Component {
                 </div>)}
             </div>
           </div>
-          <div id={'lastname'} style={styles.name}>
-            <p style={styles.namefont}>Last Name
-            </p>
+          <div id={'lastname'} style={{...styles.name, ...styles.right}}>
+            <h1 style={styles.headermargin}>Last Name</h1>
             <div
               style={{
               ...styles.row,
@@ -67,22 +65,23 @@ const styles = {
   box: {
     border: '1px solid black',
     alignSelf: 'center',
-    marginBottom: '3px',
+    marginBottom: '1.5rem',
     width: smallradius + 4,
-    height: smallradius + 8
+    height: smallradius + 12
   },
   row: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   name: {
     marginRight: '10px'
   },
   namefont: {
-    fontSize: '2em',
-    letterSpacing: '2px',
+    fontSize: '2rem',
+    letterSpacing: '.2rem',
     marginTop: '0',
-    marginBottom: '5px'
+    marginBottom: '.5rem'
   },
   page: {
     margin: 'auto',
@@ -92,8 +91,7 @@ const styles = {
     flexDirection: 'column'
   },
   margins: {
-    marginBottom: '5px',
-    marginRight: '5px'
+    marginBottom: '.5rem',
   },
   center: {
     width: '100%',

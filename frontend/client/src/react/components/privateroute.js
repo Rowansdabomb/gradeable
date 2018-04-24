@@ -32,7 +32,7 @@ class PrivateRoute extends Component {
       )
     } else {
       return (
-        <Loader />
+        <Loader fullScreen={true}/>
       )
     }
 

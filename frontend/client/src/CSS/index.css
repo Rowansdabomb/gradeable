@@ -134,11 +134,11 @@ select {
 }
 
 .justifyStart {
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .justifyEnd {
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .justifyCenter {
@@ -156,11 +156,29 @@ select {
 .alignStart {
     align-items: start;
 }
+.alignEnd {
+  align-items: end;
+}
 
 .alignCenter {
     align-items: center;
 }
 
+.row.no-out-gutters{
+  margin-left: 0;
+  margin-right: 0;
+}
+.row.no-out-gutters > div:first-child
+{ 
+  margin-top: 0 !important; 
+  margin-left: 0 !important; 
+  padding-left: 0 !important;
+}
+.row.no-out-gutters div:last-child { 
+  margin-bottom: 0 !important;
+  margin-right: 0 !important; 
+  padding-right: 0 !important;
+}
 textarea {
     font-family: 'Montserrat' !important;
     overflow: hidden;
@@ -375,6 +393,7 @@ button {
         box-shadow: none;
         font-family: 'Montserrat' !important;
         font-weight: normal;
+        page-break-after: always;
     }
     #idToPrint {
         margin: 0;

@@ -102,16 +102,20 @@ def getQR(image, thresh, pageW):
 
     # sort the question contours top-to-bottom, then initialize
     # the total number of correct answers
-    contours = sorted(contours, key=cv2.contourArea, reverse=True)
-    if(len(contours) < 1):
-        return -1
-    final = image
-    xstart= contours[0][0][0][0]
-    xend= contours[0][2][0][0]
-    ystart=contours[0][0][0][1]
-    yend=contours[0][2][0][1]
+    contours = sorted(contours, key=cv2.contourArea, reverse=False)
+    x,y,w,h = cv2.boundingRect(contours[0])
+    rect = cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
 
-    result = image[ystart:yend, xstart:xend]
+    cv2.imshow('qr', image)
+    cv2.waitKey(0)
+    if(len(contours) < 1):
+        print('error: less than one contour found searching for qr code')
+        return -1
+    print('qr contour vertices: ', x, x+w, y, y+h)
+    result = image[y:y+h, x:x+w]
+
+    cv2.imshow('qr', result)
+    cv2.waitKey(0)
     qrH, qrW = result.shape[:2]
     if(qrW - qrH != 0):
       if(qrW > qrH):
@@ -227,8 +231,8 @@ def gradePage(image, thresh, questionCnts, ANSWER_KEY):
 
             # draw the outline of the correct answer on the test
             cv2.drawContours(image, [cnts[k]], -1, color, 2)
-            # cv2.imshow('correct', image)
-            # cv2.waitKey(0)
+            cv2.imshow('correct', image)
+            cv2.waitKey(0)
     # score = (correct / len(ANSWER_KEY)) * 100
     score = str(correct) + '/' + str(len(ANSWER_KEY))
     result = (image, score)

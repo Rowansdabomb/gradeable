@@ -1,6 +1,4 @@
 var mongoose = require('mongoose');
-var ImageModel = require('./imagemodel.js');
-var TestTakerModel = require('./testtaker.js');
 
 var TestSchema = new mongoose.Schema({
   testTitle: {
@@ -18,14 +16,15 @@ var TestSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  thumbImage: {
+    type: String
+  },
   created_at: {
     type: Date
   },
   updated_at: {
     type: Date
-  },
-  testTakers: [TestTakerModel.schema],
-  imageIds: [ImageModel.schema],
+  }
 });
 
 TestSchema.pre('save', function (next) {

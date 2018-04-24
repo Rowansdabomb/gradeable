@@ -78,7 +78,7 @@ class UploadFile extends Component {
     let currpage = 1;
     let tempArray = [];
     PDFJS.getDocument(url).then((pdf) => {
-      while(currpage <= pdf.numPages){
+      for(let currpage = 1; currpage <= pdf.numPages; currpage++){
         // console.log(currpage);
         pdf.getPage(currpage).then((page) => {
           var scale = 1;
@@ -98,38 +98,29 @@ class UploadFile extends Component {
 
           pdfElement.removeChild(pdfElement.getElementsByTagName('canvas')[0]);
         });
-
-        currpage++;
-
-        if(currpage > pdf.numPages){
-          console.log(tempArray);
-          console.log(tempArray.length);
-          let formData = new FormData();
-          setTimeout(() => {
-            for(let i = 0; i < tempArray.length; i++){
-              // console.log(tempArray[i]);
-              fetch(tempArray[i])
-              .then(function(res){return res.arrayBuffer();})
-              .then(function(buf){return new File([buf], 'pdf_page' + String(i) + '.png', {type: 'image/png'});})
-              .then(function(tempFile){
-                console.log(tempFile);
-                formData.append('selectedFiles', tempFile);
-              });
-              
-            }
-            setTimeout(()=>{
-              axios.post('/api/tempFileUpload', formData)
-              .then((result) => {
-                this.props.update();
-                this.setState({
-                  // urls: tempArray,
-                  pdfRendering: false,
-                });
-              });
-            }, 1000)
-          }, 1000)
-        }
       }
+      console.log(tempArray);
+      let formData = new FormData();
+      setTimeout(() => {
+        for(let i = 0; i < tempArray.length; i++){
+          fetch(tempArray[i])
+          .then(function(res){return res.arrayBuffer();})
+          .then(function(buf){return new File([buf], 'pdf_page' + String(i) + '.png', {type: 'image/png'});})
+          .then(function(tempFile){
+            console.log(tempFile);
+            formData.append('selectedFiles', tempFile);
+          });
+        }
+        setTimeout(()=>{
+          axios.post('/api/tempFileUpload', formData)
+          .then((result) => {
+            this.props.update();
+            this.setState({
+              pdfRendering: false,
+            });
+          });
+        }, 1000)
+      }, 2000)
     });
   }
   render() {
@@ -150,7 +141,7 @@ class UploadFile extends Component {
         <div id={'pdf-view'} style={pdfShow}> 
 
         </div>
-        {this.state.pdfRendering && <Loader text={'Converting PDF'} show={true}/>}
+        {this.state.pdfRendering && <Loader text={'Converting PDF'} fullScreen={true}/>}
       </div>
     );
   }

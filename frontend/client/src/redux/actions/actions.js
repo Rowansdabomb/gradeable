@@ -44,3 +44,10 @@ export const questiontonextpage = (index) => {
 export const questiontoprevpage = (index) => {
   return {type: types.QUESTION_TO_PREV_PAGE, index:index};
 }
+
+export const getTests = (initTests) => {
+  return {type: types.GET_TESTS, initTests: initTests};
+}
+export const deleteTest = (index) => {
+  return {type: types.DELETE_TEST, index: index};
+}

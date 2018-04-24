@@ -18,7 +18,7 @@ const BubbleColumn = props => {
 
 const styles = {
   bubble:{
-    margin: '1px',
+    margin: '2px 1px',
   },
   column: {
     display: 'flex',

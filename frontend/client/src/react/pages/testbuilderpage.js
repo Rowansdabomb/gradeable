@@ -32,7 +32,6 @@ class TestBuilderPage extends Component {
       saving: false
     })
   }
-
   getTestState = () => {
     if (!this.props.new) {
       axios
@@ -63,26 +62,28 @@ class TestBuilderPage extends Component {
             preSave={this.preSave}
             postSave={this.postSave}
             testState={this.state.testState}
-            testId={this.props.testId}
-            testNumber={0}/>
+            testId={this.props.testId}/>
           
         </div>
       );
     } else {
       return (
-        <Loader text={'Loading'} show={true}/>
+        <Loader text={'Loading'} fullScreen={true}/>
       )
     }
-
   }
 }
-
+function mapStateToProps(state) {
+  return {
+    testIds: state.allTests.testIds
+  };
+}
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   };
 }
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(TestBuilderPage);

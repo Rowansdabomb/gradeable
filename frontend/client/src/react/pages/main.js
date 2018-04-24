@@ -7,7 +7,10 @@ import Analyze from './analyze';
 import Home from './home';
 import TestBuilderPage from './testbuilderpage';
 import PrivateRoute from '../components/privateroute';
-// import {headerHeight} from '../other/constants';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../redux/actions/actions';
 
 class Main extends Component {
   constructor(props) {
@@ -16,24 +19,31 @@ class Main extends Component {
       user: '',
       testIds: [],
       testTitles: [],
+      testThumbImages: [],
       testCreatedDates: [],
       testUpdatedDates: []
     };
   }
-
   getUser = (username) => {
     this.setState({user: username});
   }
-  getTests = (newTestIds, newtestTitles, newTestCreatedDates, newTestUpdatedDates) => {
-    if (this.state.testIds.length !== newTestIds.length) {
+  getTests = (data) => {
+    if (this.state.testIds.length !== data.testIds.length) {
       this.setState({
-        testIds: newTestIds, 
-        testTitles: newtestTitles, 
-        testCreatedDates: newTestCreatedDates,
-        testUpdatedDates: newTestUpdatedDates
+        testIds: data.testIds, 
+        testTitles: data.testTitles, 
+        testThumbImages: data.testThumbImages,
+        testCreatedDates: data.testCreatedDates,
+        testUpdatedDates: data.testUpdatedDates
       });
     }
   }
+  updateTests = (index) => {
+    let tempTestIds = this.state.tempTestIds;
+
+    this.setState
+  }
+  
   render() {
     function randomId() {
       let id = "";
@@ -44,12 +54,14 @@ class Main extends Component {
       return id;
     }
     return (
+      // testIds={this.state.testIds} testTitles={this.state.testTitles} testUpdatedDates={this.state.testUpdatedDates}
       <main className={'adjustHeaderHeight'}>
         <Switch>
           <Route exact path='/' component={() => (<SignInPage getUser={this.getUser}/>)}/>
           <PrivateRoute
             path='/home'
-            component={() => (<Home user={this.state.user} testIds={this.state.testIds} testTitles={this.state.testTitles} testUpdatedDates={this.state.testUpdatedDates} getTests={this.getTests}/>)}/>
+            component={() => (<Home user={this.state.user} getTests={this.getTests} 
+              testThumbImages={this.state.testThumbImages}/>)}/>
           <PrivateRoute
             exact
             path='/analyze'
@@ -87,4 +99,22 @@ class Main extends Component {
   }
 }
 
-export default Main;
+
+export default Main
+// function mapStateToProps(state) {
+//   return {
+//     testTitles: state.allTests.testTitles,
+//     testIds: state.allTests.testIds,
+//     testCreatedDates: state.allTests.testCreatedDates,
+//     testUpdatedDates: state.allTests.testUpdatedDates
+//   };
+// }
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     actions: bindActionCreators(actions, dispatch)
+//   };
+// }
+// export default connect(
+//   null,
+//   mapDispatchToProps
+// )(Main);

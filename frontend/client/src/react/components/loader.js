@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Loader = props => {
+  const type = props.fullScreen ? styles.fullScreen: styles.notFullScreen;
   return (
-      <div style={styles.fullScreen}>
+      <div style={type}>
         <div className="sk-folding-cube">
           <div className="sk-cube1 sk-cube"></div>
           <div className="sk-cube2 sk-cube"></div>
@@ -30,11 +31,8 @@ const styles = {
     height: '100%',
     zIndex: 10000,
   },
-  show: {
-    display: 'block'
-  },
-  hide: {
-    display: 'none'
+  notFullScreen:{
+    display: 'block',
   }
 }
 export default Loader;

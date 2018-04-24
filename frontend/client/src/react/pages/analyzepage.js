@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import HeaderRoute from '../components/headerroute';
 import ImageThumb from '../components/imageThumb';
-import Loader from '../components/loader';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 

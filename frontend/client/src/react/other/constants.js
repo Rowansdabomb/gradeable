@@ -3,7 +3,8 @@ var ABC = 'qwertyuiopasdfghjklzxcvbnm';
 
 ABC = ABC.toUpperCase().split("").sort();
 export const radius = 20;
-export const smallradius = 16;
+export const xsmallradius = 16;
+export const smallradius = 18;
 export const medradius = 20;
 export const qPadding = 5;
 export const maxPageHeight = 780;

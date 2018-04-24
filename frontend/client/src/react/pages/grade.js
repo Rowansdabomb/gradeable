@@ -16,14 +16,16 @@ class Grade extends Component {
       pendingImages: true,
     };
   }
+
   handleGrade = () => {
     this.setState({
       loading: true
     });
     axios.post('/api/gradetests')
     .then((result) => {
-      if(result.status !== 200){
+      if(result.status > 200){
         alert('Error from server while grading test');
+      }else{
       }
       this.setState({
         loading: false,
@@ -47,38 +49,6 @@ class Grade extends Component {
       imageIds:tempImageIds
     });
   }
-  // getGradedImageData = (index, imageId) => {
-  //   axios.get('/api/imageTempThumb', {
-  //     responseType: 'arraybuffer',
-  //     params: {
-  //       imageId: imageId
-  //     }
-  //   })
-  //   .then((result) => {
-  //     let binData = new Buffer(result.data, 'base64');
-  //     this.setState({
-  //       gradedImages: this.state.gradedImages.concat(binData)
-  //     });
-  //   });
-  // } 
-  // preGetGradedImageData = () => {
-  //   axios.get('api/imageGradedId').then((result)=> {
-  //     if(this.state.gradedImageIds.length !== result.data.length){
-  //       let temp = [];
-  //       let tempData = [];
-  //       for(let i = 0; i < result.data.length; i++){
-  //         this.getGradedImageData(i, result.data.imageIds[i].imageId);
-  //         temp.push(result.data.imageIds[i].imageId);
-  //         tempData.push(result.data.imageIds[i]);
-  //       }
-  //       this.setState({
-  //         gradedImageIds: temp,
-  //         gradedImages: [],
-  //         gradedImageData: tempData
-  //       });
-  //     }
-  //   });
-  // }
   getImageData = (index, imageId) => {
     axios.get('/api/imageTempThumb', {
       responseType: 'arraybuffer',
@@ -141,22 +111,21 @@ class Grade extends Component {
               </div>
             }
             {this.state.pendingImages &&
-              <Loader text={'Fetching exams...'}/>
+              <Loader text={'Fetching exams...'} fullScreen={false}/>
             }
 
             <div className={'row'} style={styles.imgContainer}>
               {this.state.imageIds.map((imageId, index) =>
-                <div className={['col-md-4', 'col-sm-4'].join(' ')} style={styles.colHeight} key={index}>
+                <div className={['col-md-2', 'col-sm-3'].join(' ')} style={styles.colHeight} key={index}>
                   <ImageThumb delete={this.deleteTemp} image={this.state.images[index]} imageId={imageId} index={index} />
                 </div>
               )}
             </div>
             <p>You may need to refresh your browser to see new uploads</p>
             <button className={'button'} onClick={this.handleGrade}>Grade Exams</button>
-            {/* <div className={'gradeData'}>{this.state.response}</div> */}
             {!pendingGrade && <div> <h2>Grading Complete!</h2> <p>Go to the Analyze page to see graded results</p></div>}
             
-            {this.state.loading && <Loader text={'Grading images... This may take several minutes... Do not refresh your browser'} show={true}/>}
+            {this.state.loading && <Loader text={'Grading images... This may take several minutes... Do not refresh your browser'} fullScreen={true}/>}
           </div>
         </div>
         </div>
@@ -168,7 +137,7 @@ const styles={
     margin: '1rem 0',
   },
   colHeight: {
-    maxHeight: '20rem',
+    maxHeight: '10rem',
     display: 'flex',
     justifyContent: 'center',
     margin: '1rem 0',

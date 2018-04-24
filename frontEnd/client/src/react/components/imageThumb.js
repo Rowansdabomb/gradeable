@@ -43,11 +43,6 @@ class ImageThumb extends Component {
           src={'data:image/png;base64, ' + String(this.props.image)} 
           style={styles.img}
           alt={''}/>
-        {/* <ul>
-          <li>testId: {this.state.testId}</li>
-          <li>testNumber: {this.state.testNumber}</li>
-          <li>pageNumber: {this.state.pageNumber}</li> 
-        </ul> */}
         <i className={[show, 'hover-trash', 'fa', 'fa-trash'].join(' ')} style={styles.trash}></i>
       </div>
       :<div className="sk-folding-cube">
@@ -74,7 +69,6 @@ const styles = {
   },
   container: {
     height: '100%',
-    width: '100%',
     cursor: 'pointer'
   },
   trash: {
