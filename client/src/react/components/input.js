@@ -1,6 +1,4 @@
 import React from 'react';
-// import {radius} from '../other/constants'; import $ from 'jquery'; import
-// Textarea from "react-textarea-autosize";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../redux/actions/actions';
