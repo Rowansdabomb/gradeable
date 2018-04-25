@@ -28,11 +28,13 @@ class Main extends Component {
     this.setState({user: username});
   }
   getTests = (data) => {
+    console.log(data.testThumbImages);
+    let testThumbImages = (typeof data.testThumbImage  === 'undefined') ? [] : data.testThumbImage ;
     if (this.state.testIds.length !== data.testIds.length) {
       this.setState({
         testIds: data.testIds, 
         testTitles: data.testTitles, 
-        testThumbImages: data.testThumbImages,
+        testThumbImages: testThumbImages,
         testCreatedDates: data.testCreatedDates,
         testUpdatedDates: data.testUpdatedDates
       });

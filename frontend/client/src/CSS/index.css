@@ -3,10 +3,11 @@ html {
 }
 
 :root {
-    --primary-color: #3FA5D0;
+    --primary-color: rgba(63, 165, 208, 1);
+    --primary-color-fade: rgba(63, 165, 208, 0);
     --secondary-color: #ffffff;
     --primary-font-color: #ffffff;
-    --secondary-font-color: #3FA5D0;
+    --secondary-font-color: rgba(63, 165, 208, 1);
     --font-size-xl: 3rem;
     --font-size-lg: 2rem;
     --font-size-md: 1.6rem;
@@ -15,6 +16,16 @@ html {
     --page-height: 27.94cm;
     --border-radius-button: .5rem;
     --border-thickness-button: .3rem;
+}
+
+.gradient {
+    position: relative;
+    width: 100%;
+    height: 5rem;
+    margin-bottom: -4rem !important;
+    bottom: 5rem;
+    z-index: 2;
+    background: linear-gradient(to top, var(--primary-color), var(--primary-color-fade));
 }
 
 body {
@@ -89,6 +100,7 @@ h3 {
     margin: .3rem .5rem;
 }
 
+
 /* input[type="file"]{
   width: 0.1px;
 	height: 0.1px;
@@ -97,7 +109,6 @@ h3 {
 	position: absolute;
 	z-index: -1;
 } */
-
 
 input,
 select {
@@ -119,10 +130,11 @@ select {
 }
 
 .testRow {
-  opacity: 0;
-  animation: .25s ease-out 0s 1 slideInFromLeft;
-  animation-fill-mode: forwards;
-  /* animation-delay: .1s; */
+    opacity: 0;
+    margin-bottom: 2rem;
+    animation: .25s ease-out 0s 1 slideInFromLeft;
+    animation-fill-mode: forwards;
+    /* animation-delay: .1s; */
 }
 
 .flex {
@@ -156,29 +168,32 @@ select {
 .alignStart {
     align-items: start;
 }
+
 .alignEnd {
-  align-items: end;
+    align-items: end;
 }
 
 .alignCenter {
     align-items: center;
 }
 
-.row.no-out-gutters{
-  margin-left: 0;
-  margin-right: 0;
+.row.no-out-gutters {
+    margin-left: 0;
+    margin-right: 0;
 }
-.row.no-out-gutters > div:first-child
-{ 
-  margin-top: 0 !important; 
-  margin-left: 0 !important; 
-  padding-left: 0 !important;
+
+.row.no-out-gutters>div:first-child {
+    margin-top: 0;
+    margin-left: 0;
+    padding-left: 0;
 }
-.row.no-out-gutters div:last-child { 
-  margin-bottom: 0 !important;
-  margin-right: 0 !important; 
-  padding-right: 0 !important;
+
+.row.no-out-gutters div:last-child {
+    margin-bottom: 0;
+    margin-right: 0;
+    padding-right: 0;
 }
+
 textarea {
     font-family: 'Montserrat' !important;
     overflow: hidden;
@@ -205,6 +220,7 @@ textarea {
     font-weight: bold;
     box-shadow: none;
     transition: .25s;
+    font-size: 1.4rem;
 }
 
 .button {
@@ -539,12 +555,12 @@ button {
 }
 
 @keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

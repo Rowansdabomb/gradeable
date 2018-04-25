@@ -44,13 +44,14 @@ class TestBuilder extends Component {
       let resizedCanvas = document.createElement("canvas");
       let resizedContext = resizedCanvas.getContext("2d");
 
-      resizedCanvas.height = "260";
-      resizedCanvas.width = "200";
+      resizedCanvas.height = "567";
+      resizedCanvas.width = "400";
 
       var context = canvas.getContext("2d");
 
       resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
-      var canvasThumbData = resizedCanvas.toDataURL();
+      // var canvasThumbData = resizedCanvas.toDataURL();
+      var canvasThumbData = canvas.toDataURL();
       console.log(canvasThumbData);
       // document.body.appendChild(resizedCanvas)
       //   post to /api/testsave as testThumb

@@ -132,7 +132,6 @@ app.delete('/api/deleteTest', function(req,res){
           // console.log('test deleted');
         });
     });
-
 })
 app.post('/api/testsave', function(req, res) {
   if (req.body.testId && req.body.testTitle && req.body.testState) {
@@ -142,7 +141,7 @@ app.post('/api/testsave', function(req, res) {
         for (i = 0; i < user.tests.length; i++) {
           // console.log(user.tests[i].testId, req.body.testId);
           if (user.tests[i].testId === req.body.testId) {
-            // console.log('test found', req.body.testTitle);
+            // console.log('test found', req.body.testThumbImage);
             user.tests[i].testTitle = req.body.testTitle;
             user.tests[i].testState = req.body.testState;
             user.tests[i].thumbImage = req.body.testThumbImage;
@@ -154,14 +153,15 @@ app.post('/api/testsave', function(req, res) {
           user.tests.push({
               testId: req.body.testId,
               testTitle: req.body.testTitle,
-              testState: req.body.testState
+              testState: req.body.testState,
+              thumbImage: req.body.testThumbImage,
             });
         }
         user.save(function(err) {
             if (err)
               return res.send(err);
             res.sendStatus(200);
-            // console.log('test saved');
+            console.log('test saved');
           });
 
       });
@@ -198,12 +198,12 @@ app.get('/api/testdata', function(req, res) {
       testTitles.push(user.tests[i].testTitle);
       testCreatedDates.push(user.tests[i].created_at);
       testUpdatedDates.push(user.tests[i].updated_at);
-      thumbImage.push(user.tests[i].thumbImage)
+      testThumbImage.push(user.tests[i].thumbImage);
     }
     let message = {
       'testIds': testIds,
       'testTitles': testTitles,
-      'testThumbImage': thumbImage,
+      'testThumbImage': testThumbImage,
       'testCreatedDates': testCreatedDates,
       'testUpdatedDates': testUpdatedDates
     };

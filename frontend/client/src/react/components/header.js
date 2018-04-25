@@ -47,7 +47,7 @@ class Header extends Component {
               <div className={'col-md-12'}>
                 Logged In as: <div style={styles.username}>{ this.props.user }</div>
               </div>
-              <div className={ ['col-md-6'].join(' ')}>
+              <div className={ ['col-lg-6', 'col-md-12'].join(' ')}>
                 <div className={'buttoninverse'} onClick={ this.handleLogout }>
                   logout
                 </div>
